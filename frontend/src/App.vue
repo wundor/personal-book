@@ -1,11 +1,19 @@
 <template>
-  <div>
+  <div class="card">
     <h1>Accounts:</h1>
-    <div v-for="post in accounts" v-bind:key="post.id">
-      {{ post.name }}
+    <div class="p-d-flex" v-for="account in accounts" v-bind:key="account.id">
+      {{ account.name }}
     </div>
     <InputText type="text" v-model="newAccount" />
     <Button label="Add new" @click="addAccount" />
+
+    <div class="card">
+      <div class="flex card-container">
+        <div class="flex-1 h-4rem text-white font-bold text-center p-4 border-round">1</div>
+        <div class="flex-1 h-4rem bg-indigo-500 text-white font-bold text-center p-4 border-round mx-4">2</div>
+        <div class="flex-1 h-4rem bg-indigo-500 text-white font-bold text-center p-4 border-round">3</div>
+      </div>
+    </div>
   </div>
 </template>
 
