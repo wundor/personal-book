@@ -1,45 +1,77 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import * as axios from 'axios'
-
+import { defineComponent, ref, onMounted } from "vue";
+import axios from "axios";
 export default defineComponent({
-    methods: {
-        async getAccounts() {
-            try {
-                const response = await axios.get(
-                    "http://localhost:4001/accounts"
-                );
-                // JSON responses are automatically parsed.
-                this.posts = response.data;
-            } catch (error) {
-                console.log(error);
-            }
-
-        }
-    }
-})
+  data() {
+    return {
+      accounts: [],
+      state: ref(""),
+    };
+  },
+  mounted() {
+    this.getAccounts();
+  },
+  methods: {
+    getAccounts() {
+      axios
+        .get(`${this.$api}/accounts`)
+        .then((response) => (this.accounts = response.data));
+    },
+    querySearch(queryString: string, callback: any) {
+      const results = queryString
+        ? this.accounts.filter((account: { name: string; id: string }) => {
+            return (
+              account.name.toLowerCase().indexOf(queryString.toLowerCase()) ===
+              0
+            );
+          })
+        : this.accounts;
+      const output: string[] = [];
+      callback(results);
+    },
+    handleSelect(item: string) {
+      console.log(item);
+    },
+    addAccount() {
+      console.log(this.state);
+      axios
+        .post(`${this.$api}/accounts`, {
+          name: this.state,
+        })
+        .then((response) => {
+          console.log("Everything is awesome.");
+          this.state = "";
+          this.getAccounts();
+        })
+        .catch((error) => {
+          console.warn("Not good man :(");
+        });
+    },
+  },
+});
 </script>
 
 <template>
-    <el-container style="border: 1px solid rgba(238, 238, 238, 0.267)">
-        <el-container>
-            <el-table :data="accounts">
-                <el-table-column prop="date" label="Date" width="140"></el-table-column>
-                <el-table-column prop="name" label="Name" width="120"></el-table-column>
-                <el-table-column prop="address" label="Address"></el-table-column>
-            </el-table>
-        </el-container>
+  <el-container>
+    <el-header>
+      <el-autocomplete
+        v-model="state"
+        :fetch-suggestions="querySearch"
+        value-key="name"
+        class="inline-input"
+        placeholder="Account name"
+        @select="handleSelect"
+      />
+      <el-button @click="addAccount">Add account</el-button>
+    </el-header>
+
+    <el-container>
+      <el-table :data="accounts" :fit="true">
+        <el-table-column prop="id" label="ID" width="320"></el-table-column>
+        <el-table-column prop="name" label="Name"></el-table-column>
+      </el-table>
     </el-container>
+  </el-container>
 </template>
 
-<style>
-.el-header {
-    background-color: #b3c0d1c7;
-    color: var(--el-text-color-primary);
-    line-height: 60px;
-}
-
-.el-aside {
-    color: var(--el-text-color-primary);
-}
-</style>
+<style></style>
