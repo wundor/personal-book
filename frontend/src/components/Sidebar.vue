@@ -17,6 +17,10 @@ export default defineComponent({
         <el-menu-item index="0">Budget</el-menu-item>
       </router-link>
 
+      <router-link to="/transactions">
+        <el-menu-item index="0">Transactions</el-menu-item>
+      </router-link>
+
       <el-sub-menu index="1">
         <template #title>Navigator One</template>
         <el-menu-item-group>

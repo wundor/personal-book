@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AccountsController } from './accounts.controller';
 import { AccountsService } from './accounts.service';
-import { Account } from './entities/account.entity';
+import { Accounts } from './entities/accounts.entity';
 
-const accountArray = [new Account('Assets')];
+const accountArray = [new Accounts('Assets')];
 describe('AccountsController', () => {
   let controller: AccountsController;
 
@@ -14,7 +14,7 @@ describe('AccountsController', () => {
       providers: [
         AccountsService,
         {
-          provide: getRepositoryToken(Account),
+          provide: getRepositoryToken(Accounts),
           useValue: {
             save: jest.fn(),
             find: jest.fn().mockResolvedValue(accountArray),

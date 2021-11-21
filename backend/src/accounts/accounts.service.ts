@@ -3,26 +3,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
-import { Account } from './entities/account.entity';
+import { Accounts } from './entities/accounts.entity';
 
 @Injectable()
 export class AccountsService {
   constructor(
-    @InjectRepository(Account)
-    private readonly repo: Repository<Account>
+    @InjectRepository(Accounts)
+    private readonly repo: Repository<Accounts>
   ) {}
 
-  async create(account: CreateAccountDto): Promise<Account> {
+  async create(account: CreateAccountDto): Promise<Accounts> {
     const newAccount = this.repo.create(account);
     await this.repo.save(newAccount);
     return newAccount;
   }
 
-  async findAll(): Promise<Account[]> {
+  async findAll(): Promise<Accounts[]> {
     return this.repo.find();
   }
 
-  async findOne(id: string): Promise<Account> {
+  async findOne(id: string): Promise<Accounts> {
     try {
       const account = await this.repo.findOneOrFail(id);
       return account;
@@ -31,7 +31,7 @@ export class AccountsService {
     }
   }
 
-  async update(id: string, updateAccountDto: UpdateAccountDto): Promise<Account> {
+  async update(id: string, updateAccountDto: UpdateAccountDto): Promise<Accounts> {
     await this.repo.update(id, updateAccountDto);
     return this.findOne(id);
   }

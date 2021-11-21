@@ -2,22 +2,22 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AccountsService } from './accounts.service';
-import { Account } from './entities/account.entity';
+import { Accounts } from './entities/accounts.entity';
 
-const accountArray = [new Account('Assets')];
+const accountArray = [new Accounts('Assets')];
 const testAccount = 'Test Account 1';
-const accountOne = new Account(testAccount);
+const accountOne = new Accounts(testAccount);
 
 describe('AccountsService', () => {
   let service: AccountsService;
-  let repo: Repository<Account>;
+  let repo: Repository<Accounts>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AccountsService,
         {
-          provide: getRepositoryToken(Account),
+          provide: getRepositoryToken(Accounts),
           useValue: {
             create: jest.fn().mockReturnValue(accountOne),
             save: jest.fn(),
@@ -28,7 +28,7 @@ describe('AccountsService', () => {
     }).compile();
 
     service = module.get<AccountsService>(AccountsService);
-    repo = module.get<Repository<Account>>(getRepositoryToken(Account));
+    repo = module.get<Repository<Accounts>>(getRepositoryToken(Accounts));
   });
 
   it('should be defined', () => {

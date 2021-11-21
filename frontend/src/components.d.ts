@@ -5,6 +5,7 @@
 declare module 'vue' {
   export interface GlobalComponents {
     AccountList: typeof import('./components/AccountList.vue')['default']
+    AccountSelector: typeof import('./components/AccountSelector.vue')['default']
     CarbonCampsite: typeof import('~icons/carbon/campsite')['default']
     CarbonDicomOverlay: typeof import('~icons/carbon/dicom-overlay')['default']
     CarbonLanguage: typeof import('~icons/carbon/language')['default']
@@ -29,6 +30,7 @@ declare module 'vue' {
     Header: typeof import('./components/Header.vue')['default']
     README: typeof import('./components/README.md')['default']
     Sidebar: typeof import('./components/Sidebar.vue')['default']
+    TransactionList: typeof import('./components/TransactionList.vue')['default']
   }
 }
 

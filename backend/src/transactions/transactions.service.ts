@@ -3,26 +3,27 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
-import { Transaction } from './entities/transaction.entity';
+import { Transactions } from './entities/transactions.entity';
 
 @Injectable()
 export class TransactionsService {
   constructor(
-    @InjectRepository(Transaction)
-    private readonly repo: Repository<Transaction>
+    @InjectRepository(Transactions)
+    private readonly repo: Repository<Transactions>
   ) {}
 
-  async create(transaction: CreateTransactionDto): Promise<Transaction> {
+  async create(transaction: CreateTransactionDto): Promise<Transactions> {
+    // TODO: this needs to be a db transaction in 2 separate tables
     const newTransaction = this.repo.create(transaction);
     await this.repo.save(newTransaction);
     return newTransaction;
   }
 
-  async findAll(): Promise<Transaction[]> {
+  async findAll(): Promise<Transactions[]> {
     return this.repo.find();
   }
 
-  async findOne(id: string): Promise<Transaction> {
+  async findOne(id: string): Promise<Transactions> {
     try {
       const account = await this.repo.findOneOrFail(id);
       return account;
@@ -31,7 +32,7 @@ export class TransactionsService {
     }
   }
 
-  async update(id: string, transaction: UpdateTransactionDto): Promise<Transaction> {
+  async update(id: string, transaction: UpdateTransactionDto): Promise<Transactions> {
     await this.repo.update(id, transaction);
     return this.findOne(id);
   }
