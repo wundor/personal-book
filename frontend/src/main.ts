@@ -1,11 +1,31 @@
-import { createApp } from "vue";
-import ElementPlus from "element-plus";
-import "element-plus/dist/index.css";
-import App from "./App.vue";
+// register vue composition api globally
+import { ViteSSG } from 'vite-ssg'
+import generatedRoutes from 'virtual:generated-pages'
+import { setupLayouts } from 'virtual:generated-layouts'
+import ElementPlus from 'element-plus'
+import App from './App.vue'
 
-const app = createApp(App);
+// windicss layers
+import 'virtual:windi-base.css'
+import 'virtual:windi-components.css'
+// your custom styles here
+import './styles/main.css'
+import 'element-plus/dist/index.css'
+// windicss utilities should be the last style import
+import 'virtual:windi-utilities.css'
+// windicss devtools support (dev only)
+import 'virtual:windi-devtools'
 
-app.use(ElementPlus);
-app.config.globalProperties.$api = "http://localhost:4001";
-// app.provide("api", "http://localhost:4001");
-app.mount("#app");
+const routes = setupLayouts(generatedRoutes)
+
+// https://github.com/antfu/vite-ssg
+export const createApp = ViteSSG(
+  App,
+  { routes },
+  (ctx) => {
+    // install all modules under `modules/`
+    Object.values(import.meta.globEager('./modules/*.ts')).map(i => i.install?.(ctx))
+    ctx.app.use(ElementPlus)
+    ctx.app.config.globalProperties.$api = "http://localhost:4001/api";
+  },
+)

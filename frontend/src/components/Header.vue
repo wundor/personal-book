@@ -1,21 +1,19 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { Setting } from "@element-plus/icons";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "Header",
-  components: {
-    Setting,
-  },
-});
+  name: 'Header',
+})
 </script>
 
 <template>
-  <el-container style="border: 1px solid rgba(238, 238, 238, 0.267)">
+  <el-container>
     <el-header style="text-align: right; font-size: 12px">
       <el-dropdown>
         <el-icon style="margin-right: 15px">
-          <setting />
+          <a class="icon-btn mx-2">
+            <carbon-settings />
+          </a>
         </el-icon>
         <template #dropdown>
           <el-dropdown-menu>

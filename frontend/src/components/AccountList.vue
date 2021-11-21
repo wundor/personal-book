@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref } from "vue";
 import axios from "axios";
 export default defineComponent({
   data() {
@@ -26,7 +26,6 @@ export default defineComponent({
             );
           })
         : this.accounts;
-      const output: string[] = [];
       callback(results);
     },
     handleSelect(item: string) {
@@ -67,7 +66,7 @@ export default defineComponent({
 
     <el-container>
       <el-table :data="accounts" :fit="true">
-        <el-table-column prop="id" label="ID" width="320"></el-table-column>
+        <el-table-column prop="id" label="ID" width="350"></el-table-column>
         <el-table-column prop="name" label="Name"></el-table-column>
       </el-table>
     </el-container>

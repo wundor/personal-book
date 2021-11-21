@@ -1,23 +1,24 @@
 <script lang="ts">
-import { defineComponent, ref } from "vue";
-import { Message } from "@element-plus/icons";
+import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: "Sidebar",
-  components: {
-    Message,
-  },
-});
+  name: 'Sidebar',
+})
 </script>
 
 <template>
   <el-aside width="300px" style="background-color: rgb(238, 241, 246)">
     <el-menu :default-openeds="['1']">
-      <el-menu-item index="0">Accounts</el-menu-item>
+      <router-link to="/">
+        <el-menu-item index="0">Home</el-menu-item>
+      </router-link>
+
+      <router-link to="/budget">
+        <el-menu-item index="0">Budget</el-menu-item>
+      </router-link>
+
       <el-sub-menu index="1">
-        <template #title>
-          <el-icon> <message /> </el-icon>Navigator One
-        </template>
+        <template #title>Navigator One</template>
         <el-menu-item-group>
           <template #title>Group 1</template>
           <el-menu-item index="1-1">Option 1</el-menu-item>
