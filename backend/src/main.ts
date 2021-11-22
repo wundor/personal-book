@@ -1,4 +1,4 @@
-import { ValidationPipe } from "@nestjs/common";
+import { Logger, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 
@@ -12,5 +12,6 @@ async function bootstrap() {
   );
   app.enableCors();
   await app.listen(4001);
+  Logger.log(`Thanks for using Personal Book! You're using version ${process.env.npm_package_version}`)
 }
 bootstrap();

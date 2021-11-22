@@ -9,5 +9,6 @@ import { JournalLines } from './entities/journal_lines.entity';
   imports: [TypeOrmModule.forFeature([Transactions, JournalLines])],
   controllers: [TransactionsController],
   providers: [TransactionsService],
+  exports: [TransactionsService]
 })
 export class TransactionsModule {}

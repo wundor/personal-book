@@ -1,9 +1,8 @@
 import { Type } from 'class-transformer';
 import { ArrayMinSize, IsArray, ValidateNested } from 'class-validator';
-class JournalLine {
-  account_id: number;
-  debit: number;
-  credit: number;
+export class JournalLineDto {
+  account: number;
+  amount: number;
 }
 
 export class CreateTransactionDto {
@@ -11,7 +10,7 @@ export class CreateTransactionDto {
 
   @IsArray()
   @ArrayMinSize(2)
-  @Type(() => JournalLine)
+  @Type(() => JournalLineDto)
   @ValidateNested({ each: true })
-  lines: JournalLine[]
+  lines: JournalLineDto[]
 }

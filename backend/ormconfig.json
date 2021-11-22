@@ -1,0 +1,14 @@
+{
+  "name": "default",
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3307,
+  "username": "personal_book",
+  "password": "3BYu5gQBybJ3PSh",
+  "database": "personal_book",
+  "entities": ["dist/**/*.entity{.ts,.js}"],
+  "migrations": ["dist/migrations/*{.ts,.js}"],
+  "migrationsTableName": "migrations_typeorm",
+  "migrationsRun": true,
+  "cli": { "migrationsDir": "src/migrations"}
+}

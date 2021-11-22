@@ -4,19 +4,17 @@ import { AppService } from './app.service';
 import { AccountsModule } from './accounts/accounts.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { getConnectionOptions } from 'typeorm';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3307,
-      username: 'personal_book',
-      password: '3BYu5gQBybJ3PSh',
-      database: 'personal_book',
-      autoLoadEntities: true,
-      synchronize: true,
-      dropSchema: true,
+    TypeOrmModule.forRootAsync({
+      useFactory: async () =>
+        Object.assign(await getConnectionOptions(), {
+          autoLoadEntities: true,
+          synchronize: true, // TODO: remove for prod
+          dropSchema: true // TODO: remove for prod
+        }),
     }),
     AccountsModule,
     TransactionsModule,

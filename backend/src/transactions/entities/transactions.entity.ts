@@ -1,3 +1,4 @@
+import { IsDefined } from 'class-validator';
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { JournalLines } from './journal_lines.entity';
 
@@ -7,6 +8,7 @@ export class Transactions {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @IsDefined()
   @Column()
   timestamp: string;
   
