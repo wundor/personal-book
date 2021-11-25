@@ -1,0 +1,19 @@
+{
+  "name": "default",
+  "type": "mysql",
+  "host": "localhost",
+  "port": 3307,
+  "username": "personal_book",
+  "password": "3BYu5gQBybJ3PSh",
+  "database": "personal_book",
+  "logging": "all",
+  "migrationsRun": true,
+  "entities": ["src/lib/entities/**/*.ts"],
+  "migrations": ["dist/migrations/**/*.{ts,js}"],
+  "subscribers": ["subscribers/**/*.ts"],
+  "cli": {
+    "entitiesDir": "src/lib/entities/**/*.ts",
+    "migrationsDir": "migrations/**/*.ts",
+    "subscribersDir": "subscribers/**/*.ts"
+  }
+}
