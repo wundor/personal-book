@@ -19,8 +19,8 @@ import { AppService } from './app.service';
       autoLoadEntities: true,
       migrationsRun: true,
       migrations: ['dist/migrations/*.js'],
-      synchronize: true, // TODO: remove for prod
-      dropSchema: true // TODO: remove for prod
+      // synchronize: true, // TODO: remove for prod
+      // dropSchema: true // TODO: remove for prod
     }),
     AccountsModule,
     TransactionsModule
