@@ -1,17 +1,22 @@
+import { Entity, Property, Collection, OneToMany } from '@mikro-orm/core';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { BaseEntity } from 'src/app/entities/base.entity';
 import { JournalLine } from 'src/transactions/entities/journal_line.entity';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
-export class Account {
-  @PrimaryGeneratedColumn()
+export class Account extends BaseEntity {
   @OneToMany(() => JournalLine, (line) => line.accountId)
-  id: number;
+  journal_lines = new Collection<JournalLine>(this);
 
-  @Column()
-  name: string;
+  @Property()
+  @IsString()
+  @IsNotEmpty()
+  name!: string;
 
+  // type
   constructor(name: string) {
+    super();
     this.name = name;
   }
-  // TODO: add tree hierarchy https://orkhan.gitbook.io/typeorm/docs/tree-entities - account name should be unique amongst all children of another account
+  // TODO: add tree hierarchy - account name should be unique amongst all children of another account
 }

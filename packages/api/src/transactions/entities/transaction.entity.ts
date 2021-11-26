@@ -1,21 +1,25 @@
-import { IsDefined } from 'class-validator';
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Collection, Entity, OneToMany, Property } from '@mikro-orm/core';
+import { IsDate, IsDefined, IsString } from 'class-validator';
+import { BaseEntity } from 'src/app/entities/base.entity';
 import { JournalLine } from './journal_line.entity';
 
 @Entity()
-export class Transaction {
+export class Transaction extends BaseEntity {
   @OneToMany(() => JournalLine, (line) => line.transactionId)
-  @PrimaryGeneratedColumn()
-  id: number;
+  journal_lines = new Collection<JournalLine>(this);
 
   @IsDefined()
-  @Column()
-  timestamp: string;
-  
-  @Column()
+  @IsDate()
+  date!: Date;
+
+  @Property()
+  @IsString()
   info: string;
 
-  constructor() {
-    this.timestamp = new Date().toISOString();
+  //status
+  constructor(date: Date, info: string) {
+    super();
+    this.date = date;
+    this.info = info;
   }
 }

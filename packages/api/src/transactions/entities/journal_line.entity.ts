@@ -1,33 +1,27 @@
-import { IsDefined } from 'class-validator';
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { IsDefined, IsNumber } from 'class-validator';
 import { Account } from 'src/accounts/entities/account.entity';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-} from 'typeorm';
+import { BaseEntity } from 'src/app/entities/base.entity';
 import { Transaction } from './transaction.entity';
 
 @Entity()
-export class JournalLine {
-  @PrimaryGeneratedColumn()
-  id: number;
+export class JournalLine extends BaseEntity {
+  @IsDefined()
+  @ManyToOne()
+  @IsNumber()
+  transactionId!: Transaction;
 
   @IsDefined()
-  @ManyToOne(() => Transaction, (transaction) => transaction.id)
-  @Column()
-  transactionId: number;
+  @ManyToOne()
+  @IsNumber()
+  accountId!: Account;
 
   @IsDefined()
-  @ManyToOne(() => Account, (account) => account.id)
-  @Column()
-  accountId: number;
+  @Property({ columnType: 'DECIMAL(17,8)' })
+  amount!: number;
 
-  @IsDefined()
-  @Column('decimal', { precision: 17, scale: 8 })
-  amount: number;
-
-  constructor() {
-    // this.timestamp = new Date().toISOString();
+  constructor(amount: number) {
+    super();
+    this.amount = amount;
   }
 }
