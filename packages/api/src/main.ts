@@ -17,13 +17,25 @@ async function bootstrap() {
     user: 'personal_book',
     password: '3BYu5gQBybJ3PSh',
     dbName: 'personal_book',
+    migrations: {
+      tableName: 'mikro_orm_migrations',
+      path: './dist/src/migrations',
+      pattern: /^[\w-]+\d+\.js$/,
+      transactional: true,
+      allOrNothing: true,
+      safe: true,
+    },
     debug: true,
   });
   const generator = orm.getSchemaGenerator();
-  await generator.dropSchema();
+
+  // TODO: wrap it in 'develop' flag or something, this needs to not execute on production!
+  await generator.dropDatabase('personal_book');
+  await generator.createDatabase('personal_book');
+  // await generator.dropSchema();
   await generator.createSchema();
+
   const migrator = orm.getMigrator();
-  await migrator.createMigration();
   await migrator.up();
   await orm.close(true);
 

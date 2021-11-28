@@ -1,0 +1,10 @@
+{
+  "name": "@pb/lib",
+  "version": "1.0.0",
+  "files": [
+    "dist"
+  ],
+  "license": "UNLICENSED",
+  "scripts": {},
+  "dependencies": {}
+}

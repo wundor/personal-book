@@ -1,0 +1,32 @@
+<button nz-button nzType="primary" (click)="addNew.showModal()">
+  Create new transaction
+</button>
+<app-transactions-add-new
+  #addNew
+  (added)="showTransactions()"
+></app-transactions-add-new>
+
+<nz-table #transactionsTable [nzData]="transactions">
+  <thead>
+    <tr>
+      <th
+        *ngFor="let column of listOfColumns"
+        [nzSortOrder]="column.sortOrder"
+        [nzSortFn]="column.sortFn"
+        [nzSortDirections]="column.sortDirections"
+      >
+        {{ column.name }}
+      </th>
+      <th>Info</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of transactionsTable.data">
+      <td>{{ data.date.toString().substring(0, 10) }}</td>
+      <td>{{ data.info }}</td>
+      <td>
+        <a>Delete</a>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>

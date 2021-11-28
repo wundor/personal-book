@@ -1,18 +1,19 @@
-import { EntityRepository } from '@mikro-orm/core';
+import {
+  EntityRepository,
+  UniqueConstraintViolationException,
+} from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { JournalLine } from 'src/transactions/entities/journal_line.entity';
-import { Transaction } from 'src/transactions/entities/transaction.entity';
-import { TransactionsService } from 'src/transactions/transactions.service';
+import { META } from '@pb/lib/src';
+import { TransactionsService } from '../transactions/transactions.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { Account } from './entities/account.entity';
-
-const START = 'META:Starting-Balance';
 
 @Injectable()
 export class AccountsService {
@@ -23,35 +24,49 @@ export class AccountsService {
   ) {}
 
   async create(account: CreateAccountDto): Promise<Account> {
-    // let startingAccount: Account;
+    let startingAccount: Account;
     try {
-      // startingAccount = await this.findByName(START);
+      startingAccount = await this.findByName(META.START);
     } catch (NotFoundException) {
       throw new InternalServerErrorException(
-        `${START} account was not found. Looks like something went wrong during initial db migration`,
+        `${META.START} account was not found. Looks like something went wrong during initial db migration`,
       );
     }
-    const newAccount = new Account(account.name);
-    const initTransaction = new Transaction(
-      new Date('1970-01-01'),
-      `Starting balance for ${account.name}`,
-    );
-    const initLines = [
-      new JournalLine(account.startingBalance),
-      new JournalLine(-account.startingBalance),
-    ];
-    try {
-      this.repo.persist(newAccount);
-      for (const line of initLines) {
-        initTransaction.journal_lines.add(line);
-        newAccount.journal_lines.add(line);
-      }
-      this.repo.flush();
-    } catch (err) {
-      throw new InternalServerErrorException(err);
-    }
 
-    return newAccount;
+    try {
+      this.repo.persist(new Account(account.fullName));
+      await this.repo.flush();
+      const newAccount = await this.findByName(account.fullName);
+      // if (account.startingBalance) {
+      // TODO: possible solution - create tmp account_inbox entity with account id and pending starting balance, emit an event and transaction module will listen to it, add the transaction and remove tmp entity
+      // console.log(account.startingBalance);
+      // await this.transactions.create({
+      //   date: new Date('1970-01-01'),
+      //   info: `Starting balance for account ${account.name}`,
+      //   lines: [
+      //     {
+      //       account: newAccount,
+      //       amount: account.startingBalance,
+      //     },
+      //     {
+      //       account: startingAccount,
+      //       amount: -account.startingBalance,
+      //     },
+      //   ],
+      // });
+      // }
+      return newAccount;
+    } catch (e) {
+      if (e instanceof UniqueConstraintViolationException) {
+        throw new BadRequestException(
+          `Account with name ${account.fullName} already exists`,
+        );
+      } else {
+        throw new InternalServerErrorException(
+          `Something went wrong during account creation: ${e.message}. Check application log for more info`,
+        );
+      }
+    }
   }
 
   async findAll(): Promise<Account[]> {
@@ -79,7 +94,7 @@ export class AccountsService {
   async findByName(name: string): Promise<Account> {
     try {
       const account = await this.repo.findOneOrFail({
-        name: name,
+        fullName: name,
       });
       return account;
     } catch (err) {

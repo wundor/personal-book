@@ -1,10 +1,7 @@
 import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { Injectable, NotFoundException } from '@nestjs/common';
-import {
-  CreateTransactionDto,
-  JournalLineDto,
-} from './dto/create-transaction.dto';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { JournalLine } from './entities/journal_line.entity';
 import { Transaction } from './entities/transaction.entity';
 
@@ -12,27 +9,33 @@ import { Transaction } from './entities/transaction.entity';
 export class TransactionsService {
   constructor(
     @InjectRepository(Transaction)
-    private readonly transactions: EntityRepository<Transaction>,
-    @InjectRepository(JournalLine)
-    private readonly journalLines: EntityRepository<JournalLine>,
+    private readonly repo: EntityRepository<Transaction>,
   ) {}
 
   async create(transaction: CreateTransactionDto): Promise<Transaction> {
-    const newTransaction = this.transactions.create(transaction);
-    // const writtenTransaction = await this.transactions.save(newTransaction);
-    // transaction.lines.forEach((line: JournalLineDto) => {
-    //   this.journalLines.save({
-    //     account_id: line.account,
-    //     amount: line.amount,
-    //     transaction_id: writtenTransaction.id,
-    //   });
-    // });
-    return newTransaction;
+    const initTransaction = new Transaction(transaction.date, transaction.info);
+    let transactionBalance = 0;
+    transaction.lines.forEach((line) => {
+      transactionBalance += line.amount;
+      initTransaction.journal_lines.add(
+        // TODO: get account by full and then create a line
+        // new JournalLine(line.account, line.amount),
+      );
+    });
+    Logger.debug(`Lines: ${JSON.stringify(transaction.lines)}`);
+    if (transactionBalance !== 0) {
+      const message = `Transaction '${transaction.info}' is not balanced! ${transactionBalance} != 0`;
+      Logger.error(message);
+      throw new BadRequestException(message);
+    }
+    this.repo.persist(initTransaction);
+    await this.repo.flush();
+    return initTransaction;
   }
 
-  // async findAll(): Promise<Transaction[]> {
-  //   return this.transactions.find();
-  // }
+  async findAll(): Promise<Transaction[]> {
+    return this.repo.findAll();
+  }
 
   // async findOne(id: string): Promise<Transaction> {
   //   try {

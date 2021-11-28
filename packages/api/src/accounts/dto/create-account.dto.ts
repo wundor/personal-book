@@ -1,11 +1,8 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
+import { IAccount } from '@pb/lib/src';
 
-export class CreateAccountDto {
+export class CreateAccountDto implements IAccount {
   @IsNotEmpty()
   @IsString()
-  name: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  startingBalance: number;
+  fullName!: string;
 }

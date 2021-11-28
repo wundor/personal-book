@@ -5,8 +5,9 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  // Delete,
   Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
@@ -33,12 +34,15 @@ export class AccountsController {
   }
 
   @Get(':id')
-  findOneById(@Param('id') id: number) {
+  findOneById(@Param('id', ParseIntPipe) id: number) {
     return this.accountsService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateAccountDto: UpdateAccountDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateAccountDto: UpdateAccountDto,
+  ) {
     return this.accountsService.update(id, updateAccountDto);
   }
 

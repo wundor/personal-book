@@ -1,5 +1,13 @@
-<!-- <button nz-button nzType="primary" (click)="showModal()">Add account</button> -->
-<nz-table #basicTable [nzData]="accounts">
+<button nz-button nzType="primary" (click)="addNew.showModal()">
+  Add new account
+</button>
+<app-accounts-add-new
+  #addNew
+  (added)="showAccounts()"
+  [accountList]="accountsList"
+></app-accounts-add-new>
+
+<nz-table #accountsTable [nzData]="accounts">
   <thead>
     <tr>
       <th>Name</th>
@@ -7,11 +15,9 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of basicTable.data">
-      <td>{{ data.name }}</td>
+    <tr *ngFor="let data of accountsTable.data">
+      <td>{{ data.fullName }}</td>
       <td>
-        <a>Action 一 {{ data.name }}</a>
-        <nz-divider nzType="vertical"></nz-divider>
         <a>Delete</a>
       </td>
     </tr>

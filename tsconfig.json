@@ -1,12 +1,3 @@
 {
-  "extends": "./tsconfig.build.json",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@pb/*": [
-        "packages/*/src"
-      ]
-    },
-    "noEmit": true
-  }
+  "compileOnSave": false,
 }

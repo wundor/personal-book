@@ -1,7 +1,7 @@
 import { MikroOrmModule } from '@mikro-orm/nestjs';
 import { Module } from '@nestjs/common';
-import { TransactionsModule } from 'src/transactions/transactions.module';
-import { AccountsModule } from 'src/accounts/accounts.module';
+import { TransactionsModule } from '../transactions/transactions.module';
+import { AccountsModule } from '../accounts/accounts.module';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';

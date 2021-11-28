@@ -1,14 +1,15 @@
 import { Collection, Entity, OneToMany, Property } from '@mikro-orm/core';
 import { IsDate, IsDefined, IsString } from 'class-validator';
-import { BaseEntity } from 'src/app/entities/base.entity';
+import { BaseEntity } from '../../app/entities/base.entity';
 import { JournalLine } from './journal_line.entity';
 
 @Entity()
 export class Transaction extends BaseEntity {
-  @OneToMany(() => JournalLine, (line) => line.transactionId)
+  @OneToMany(() => JournalLine, (line) => line.transaction)
   journal_lines = new Collection<JournalLine>(this);
 
   @IsDefined()
+  @Property()
   @IsDate()
   date!: Date;
 

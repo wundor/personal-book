@@ -1,7 +1,49 @@
-<!-- <nz-modal
+<nz-modal
   [(nzVisible)]="isVisible"
-  nzTitle="Add new Account"
-  [nzOkLoading]="isOkLoading"
+  nzTitle="Add new account"
+  (nzOnCancel)="handleCancel()"
 >
-  <p *nzModalContent>Modal Content</p>
-</nz-modal> -->
+  <form
+    nz-form
+    [nzLayout]="'inline'"
+    [formGroup]="validateForm"
+    (ngSubmit)="submitForm()"
+  >
+    <nz-form-item *nzModalContent>
+      <nz-form-control nzErrorTip="Should not be empty">
+        <nz-input-group nzPrefixIcon="user">
+          <nz-autocomplete
+            [nzDataSource]="filteredOptions"
+            #auto
+          ></nz-autocomplete>
+          <input
+            formControlName="fullName"
+            nz-input
+            placeholder="Account name"
+            [(ngModel)]="inputValue"
+            (ngModelChange)="onChange($event)"
+            [nzAutocomplete]="auto"
+          />
+        </nz-input-group>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <div *nzModalFooter>
+        <nz-form-control>
+          <button nz-button nzType="default" (click)="handleCancel()">
+            Cancel
+          </button>
+          <button
+            nz-button
+            nzType="primary"
+            [disabled]="!validateForm.valid"
+            [nzLoading]="isOkLoading"
+            (click)="submitForm()"
+          >
+            Add
+          </button>
+        </nz-form-control>
+      </div>
+    </nz-form-item>
+  </form>
+</nz-modal>
