@@ -6,6 +6,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormControl,
   FormGroup,
@@ -32,45 +33,36 @@ export class TransactionsAddNewComponent implements OnInit {
   @Output() added: EventEmitter<IAccount> = new EventEmitter<IAccount>();
   inputValue?: string;
   filteredOptions: string[] = [];
-
-  validateForm!: FormGroup;
+  linesForm!: FormGroup;
+  lines!: FormArray;
 
   date = null;
 
   listOfLines: Array<{
-    id: number;
-    data: IJournalLine;
+    account: string;
+    amount: string;
   }> = [];
 
   addField(e?: MouseEvent): void {
     if (e) {
       e.preventDefault();
     }
-    const id =
-      this.listOfLines.length > 0
-        ? this.listOfLines[this.listOfLines.length - 1].id + 1
-        : 0;
 
-    const line = {
-      id: id,
-      data: { account: 'number', amount: 123 },
-    };
-
-    const index = this.listOfLines.push(line);
-    console.log(this.listOfLines[this.listOfLines.length - 1]);
-    this.validateForm.addControl(
-      this.listOfLines[index - 1].data.account,
-      new FormControl(null, Validators.required),
-    );
+    this.lines = this.linesForm.get('lines') as FormArray;
+    const newItem = this.createItem();
+    this.lines.push(newItem);
+    newItem.addControl('account', new FormControl(null, Validators.required));
+    newItem.addControl('amount', new FormControl(null, Validators.required));
   }
 
-  removeField(i: { id: number; data: IJournalLine }, e: MouseEvent): void {
+  removeField(i: { account: string; amount: string }, e: MouseEvent): void {
     e.preventDefault();
     if (this.listOfLines.length > 1) {
       const index = this.listOfLines.indexOf(i);
       this.listOfLines.splice(index, 1);
       console.log(this.listOfLines);
-      this.validateForm.removeControl(i.data.account);
+      this.linesForm.removeControl(i.account);
+      this.linesForm.removeControl(i.amount);
     }
   }
 
@@ -89,7 +81,7 @@ export class TransactionsAddNewComponent implements OnInit {
   submitForm(): void {
     this.isOkLoading = true;
     this.transactions
-      .addTransaction(this.validateForm.value)
+      .addTransaction(this.linesForm.value)
       .pipe(catchError(this.shared.handleError))
       .subscribe((account: ITransaction) => {
         // this.added.emit({
@@ -100,7 +92,7 @@ export class TransactionsAddNewComponent implements OnInit {
           'Success!',
           'Account was added successfully',
         );
-        this.validateForm.reset();
+        this.linesForm.reset();
         this.isVisible = false;
       });
     this.isOkLoading = false;
@@ -114,6 +106,13 @@ export class TransactionsAddNewComponent implements OnInit {
     this.isVisible = false;
   }
 
+  createItem(): FormGroup {
+    return this.fb.group({
+      account: '',
+      amount: '',
+    });
+  }
+
   constructor(
     private fb: FormBuilder,
     private transactions: TransactionsService,
@@ -124,10 +123,10 @@ export class TransactionsAddNewComponent implements OnInit {
 
   ngOnInit(): void {
     this.showAccounts();
-    this.validateForm = this.fb.group({
-      date: [null, [Validators.required]],
-      info: [null, []],
-      fullName: [null, [Validators.required]],
+    this.linesForm = this.fb.group({
+      date: '',
+      info: '',
+      lines: this.fb.array([this.createItem()]),
     });
     this.addField();
   }

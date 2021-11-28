@@ -3,7 +3,7 @@
   nzTitle="Create transaction"
   (nzOnCancel)="handleCancel()"
 >
-  <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+  <form nz-form [formGroup]="linesForm" (ngSubmit)="submitForm()">
     <div *nzModalContent>
       <div nz-row>
         <div nz-col>
@@ -28,35 +28,46 @@
         </div>
       </div>
 
-      <div nz-row *ngFor="let line of listOfLines; let i = index">
-        <div nz-col>
+      <!-- <div nz-row *ngFor="let line of listOfLines; let i = index"> -->
+      <div
+        nz-row
+        formArrayName="lines"
+        *ngFor="let item of lines['controls']; let i = index"
+      >
+        <div nz-col [formGroupName]="i">
           <nz-form-item>
-            <nz-form-control
-              nzErrorTip="Please input account name or delete this field."
-            >
+            <nz-form-control nzErrorTip="Enter name">
               <nz-autocomplete
                 [nzDataSource]="filteredOptions"
                 #auto
               ></nz-autocomplete>
               <input
-                formControlName="fullName"
-                class="account-input"
+                formControlName="account"
+                class="account"
                 nz-input
                 placeholder="account"
-                [attr.id]="line.id"
-                [formControlName]="line.data.account"
                 [(ngModel)]="inputValue"
                 [nzAutocomplete]="auto"
                 (ngModelChange)="onChange($event)"
               />
-              <i
-                nz-icon
-                nzType="setting"
-                nzTheme="outline"
-                class="dynamic-delete-button"
-                (click)="removeField(line, $event)"
-              ></i>
             </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [formGroupName]="i">
+          <nz-form-item>
+            <input
+              formControlName="amount"
+              class="amount"
+              nz-input
+              placeholder="amount"
+            />
+            <i
+              nz-icon
+              nzType="setting"
+              nzTheme="outline"
+              class="dynamic-delete-button"
+            ></i>
+            <!-- (click)="removeField(i, $event)" -->
           </nz-form-item>
         </div>
       </div>
@@ -77,12 +88,6 @@
           </button>
         </nz-form-control>
       </nz-form-item>
-
-      <nz-form-item>
-        <nz-form-control nzErrorTip="Should not be empty">
-          <nz-input-group> </nz-input-group>
-        </nz-form-control>
-      </nz-form-item>
     </div>
     <nz-form-item>
       <div *nzModalFooter>
@@ -93,7 +98,7 @@
           <button
             nz-button
             nzType="primary"
-            [disabled]="!validateForm.valid"
+            [disabled]="!linesForm.valid"
             [nzLoading]="isOkLoading"
             (click)="submitForm()"
           >
