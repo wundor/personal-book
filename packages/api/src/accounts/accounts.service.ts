@@ -9,8 +9,6 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { META } from '@pb/lib/src';
-import { TransactionsService } from '../transactions/transactions.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 import { Account } from './entities/account.entity';
@@ -20,41 +18,12 @@ export class AccountsService {
   constructor(
     @InjectRepository(Account)
     private readonly repo: EntityRepository<Account>,
-    private readonly transactions: TransactionsService,
   ) {}
 
   async create(account: CreateAccountDto): Promise<Account> {
-    let startingAccount: Account;
     try {
-      startingAccount = await this.findByName(META.START);
-    } catch (NotFoundException) {
-      throw new InternalServerErrorException(
-        `${META.START} account was not found. Looks like something went wrong during initial db migration`,
-      );
-    }
-
-    try {
-      this.repo.persist(new Account(account.fullName));
-      await this.repo.flush();
+      await this.repo.persistAndFlush(new Account(account.fullName));
       const newAccount = await this.findByName(account.fullName);
-      // if (account.startingBalance) {
-      // TODO: possible solution - create tmp account_inbox entity with account id and pending starting balance, emit an event and transaction module will listen to it, add the transaction and remove tmp entity
-      // console.log(account.startingBalance);
-      // await this.transactions.create({
-      //   date: new Date('1970-01-01'),
-      //   info: `Starting balance for account ${account.name}`,
-      //   lines: [
-      //     {
-      //       account: newAccount,
-      //       amount: account.startingBalance,
-      //     },
-      //     {
-      //       account: startingAccount,
-      //       amount: -account.startingBalance,
-      //     },
-      //   ],
-      // });
-      // }
       return newAccount;
     } catch (e) {
       if (e instanceof UniqueConstraintViolationException) {

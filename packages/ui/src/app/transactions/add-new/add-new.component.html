@@ -11,6 +11,7 @@
             <nz-form-control nzErrorTip="Should not be empty">
               <nz-date-picker
                 [(ngModel)]="date"
+                type="date"
                 formControlName="date"
               ></nz-date-picker>
             </nz-form-control>
@@ -46,7 +47,6 @@
                 class="account"
                 nz-input
                 placeholder="account"
-                [(ngModel)]="inputValue"
                 [nzAutocomplete]="auto"
                 (ngModelChange)="onChange($event)"
               />
@@ -57,17 +57,18 @@
           <nz-form-item>
             <input
               formControlName="amount"
+              type="number"
               class="amount"
               nz-input
               placeholder="amount"
             />
             <i
               nz-icon
-              nzType="setting"
+              nzType="minus-circle"
               nzTheme="outline"
               class="dynamic-delete-button"
+              (click)="removeField(i, $event)"
             ></i>
-            <!-- (click)="removeField(i, $event)" -->
           </nz-form-item>
         </div>
       </div>

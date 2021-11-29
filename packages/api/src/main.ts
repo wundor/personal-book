@@ -27,13 +27,13 @@ async function bootstrap() {
     },
     debug: true,
   });
-  const generator = orm.getSchemaGenerator();
 
   // TODO: wrap it in 'develop' flag or something, this needs to not execute on production!
-  await generator.dropDatabase('personal_book');
-  await generator.createDatabase('personal_book');
+  // const generator = orm.getSchemaGenerator();
+  // await generator.dropDatabase('personal_book');
+  // await generator.createDatabase('personal_book');
   // await generator.dropSchema();
-  await generator.createSchema();
+  // await generator.createSchema();
 
   const migrator = orm.getMigrator();
   await migrator.up();
@@ -45,7 +45,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({}));
   app.enableCors();
   const port = process.env.PORT || 3333;
-  await app.listen(port, () => {
+  await app.listen(port, '0.0.0.0', () => {
     Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
   });
 }

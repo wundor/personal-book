@@ -13,6 +13,6 @@ export interface IJournalLine {
   amount: number;
 }
 
-export const enum META {
-  START = 'META:Starting-Balance',
+export const enum ACCOUNTS {
+  START = 'EQUITY:Starting-Balance',
 }

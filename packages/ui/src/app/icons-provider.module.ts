@@ -12,6 +12,7 @@ import {
   SettingOutline,
   HomeOutline,
   PlusOutline,
+  BookOutline,
 } from '@ant-design/icons-angular/icons';
 
 const icons = [
@@ -25,6 +26,7 @@ const icons = [
   SettingOutline,
   HomeOutline,
   PlusOutline,
+  BookOutline,
 ];
 
 @NgModule({

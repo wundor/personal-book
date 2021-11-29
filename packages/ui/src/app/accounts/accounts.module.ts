@@ -13,6 +13,8 @@ import { AccountsAddNewComponent } from './add-new/add-new.component';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { SharedModule } from '../shared/shared.module';
 import { IconsProviderModule } from '../icons-provider.module';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 @NgModule({
   imports: [
@@ -29,6 +31,8 @@ import { IconsProviderModule } from '../icons-provider.module';
     NzAutocompleteModule,
     SharedModule,
     IconsProviderModule,
+    NzInputModule,
+    NzSelectModule,
   ],
   declarations: [AccountsListComponent, AccountsAddNewComponent],
   exports: [],

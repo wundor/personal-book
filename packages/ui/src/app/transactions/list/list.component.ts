@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { TransactionsService } from '../transactions.service';
 import { ITransaction } from '@pb/lib/src';
 import { NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
+import { Title } from '@angular/platform-browser';
 
 interface ColumnItem {
   name: string;
@@ -23,8 +24,9 @@ export class TransactionsListComponent implements OnInit {
     {
       name: 'Date',
       sortOrder: 'descend',
-      sortFn: (a: ITransaction, b: ITransaction) =>
-        a.date.getTime() - b.date.getTime(),
+      sortFn: (a: ITransaction, b: ITransaction) => {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      },
       sortDirections: ['ascend', 'descend'],
     },
   ];
@@ -35,9 +37,10 @@ export class TransactionsListComponent implements OnInit {
     });
   }
 
-  constructor(private listService: TransactionsService) {}
+  constructor(private listService: TransactionsService, private title: Title) {}
 
   ngOnInit(): void {
     this.showTransactions();
+    this.title.setTitle('Transactions');
   }
 }

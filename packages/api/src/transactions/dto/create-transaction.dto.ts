@@ -25,6 +25,7 @@ export class JournalLineDto {
 export class CreateTransactionDto implements ITransaction {
   @IsNotEmpty()
   @IsDate()
+  @Type(() => Date)
   date!: Date;
 
   info!: string;

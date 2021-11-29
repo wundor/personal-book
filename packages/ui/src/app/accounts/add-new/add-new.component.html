@@ -9,24 +9,35 @@
     [formGroup]="validateForm"
     (ngSubmit)="submitForm()"
   >
-    <nz-form-item *nzModalContent>
-      <nz-form-control nzErrorTip="Should not be empty">
-        <nz-input-group nzPrefixIcon="user">
-          <nz-autocomplete
-            [nzDataSource]="filteredOptions"
-            #auto
-          ></nz-autocomplete>
-          <input
-            formControlName="fullName"
-            nz-input
-            placeholder="Account name"
-            [(ngModel)]="inputValue"
-            (ngModelChange)="onChange($event)"
-            [nzAutocomplete]="auto"
-          />
-        </nz-input-group>
-      </nz-form-control>
-    </nz-form-item>
+    <div *nzModalContent>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Should not be empty">
+          <nz-input-group
+            nzPrefixIcon="user"
+            [nzAddOnBefore]="addOnBeforeTemplate"
+          >
+            <nz-autocomplete
+              [nzDataSource]="filteredOptions"
+              #auto
+            ></nz-autocomplete>
+            <input
+              formControlName="fullName"
+              nz-input
+              placeholder="Account name"
+              [(ngModel)]="inputValue"
+              (ngModelChange)="onChange($event)"
+              [nzAutocomplete]="auto"
+            />
+            <ng-template #addOnBeforeTemplate>
+              <nz-select [ngModel]="'Http://'">
+                <nz-option nzLabel="Http://" nzValue="Http://"></nz-option>
+                <nz-option nzLabel="Https://" nzValue="Https://"></nz-option>
+              </nz-select>
+            </ng-template>
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
     <nz-form-item>
       <div *nzModalFooter>
         <nz-form-control>

@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { NZ_I18N } from 'ng-zorro-antd/i18n';
@@ -16,7 +16,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { AccountsModule } from './accounts/accounts.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { SharedModule } from './shared/shared.module';
-import { NzIconModule } from 'ng-zorro-antd/icon';
 
 registerLocaleData(en);
 
@@ -34,7 +33,7 @@ registerLocaleData(en);
     TransactionsModule,
     SharedModule,
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }],
+  providers: [{ provide: NZ_I18N, useValue: en_US }, Title],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

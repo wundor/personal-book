@@ -3,6 +3,7 @@ import { AccountsService } from '../accounts.service';
 import { IAccount } from '@pb/lib/src';
 import { catchError } from 'rxjs/operators';
 import { SharedService } from 'src/app/shared/shared.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-accounts-list',
@@ -29,9 +30,11 @@ export class AccountsListComponent implements OnInit {
   constructor(
     private accountsService: AccountsService,
     private shared: SharedService,
+    private title: Title,
   ) {}
 
   ngOnInit(): void {
     this.showAccounts();
+    this.title.setTitle('Accounts');
   }
 }

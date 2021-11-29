@@ -1,4 +1,5 @@
 <nz-layout class="app-layout">
+  <title>Personal Book</title>
   <nz-sider
     class="menu-sidebar"
     nzCollapsible
@@ -8,8 +9,9 @@
     [nzTrigger]="null"
   >
     <div class="sidebar-logo">
-      <a href="https://ng.ant.design/" target="_blank">
-        <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" />
+      <a href="{{ home }}" target="_blank">
+        <i nz-icon nzType="book" nzTheme="outline"></i>
+        <!-- <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" /> -->
         <h1>Personal Book</h1>
       </a>
     </div>
@@ -23,11 +25,14 @@
         <li nz-menu-item nzMatchRouter>
           <a routerLink="/accounts">Accounts</a>
         </li>
+        <li nz-menu-item nzMatchRouter>
+          <a routerLink="/transactions">Transactions</a>
+        </li>
         <li nz-menu-item nzMatchRouter [nzDisabled]="true">
           <a routerLink="/budget">Budget</a>
         </li>
-        <li nz-menu-item nzMatchRouter>
-          <a routerLink="/transactions">Transactions</a>
+        <li nz-menu-item nzMatchRouter [nzDisabled]="true">
+          <a routerLink="/reports">Reports</a>
         </li>
       </ul>
     </ul>

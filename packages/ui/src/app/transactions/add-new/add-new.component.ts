@@ -12,7 +12,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { IAccount, IJournalLine, ITransaction } from '@pb/lib/src';
+import { IAccount, ITransaction } from '@pb/lib/src';
 import { TransactionsService } from '../transactions.service';
 import { catchError } from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -30,8 +30,7 @@ export class TransactionsAddNewComponent implements OnInit {
   isOkLoading = false;
   isVisible = false;
   accountsList: string[] = [];
-  @Output() added: EventEmitter<IAccount> = new EventEmitter<IAccount>();
-  inputValue?: string;
+  @Output() added: EventEmitter<boolean> = new EventEmitter<boolean>();
   filteredOptions: string[] = [];
   linesForm!: FormGroup;
   lines!: FormArray;
@@ -55,27 +54,12 @@ export class TransactionsAddNewComponent implements OnInit {
     newItem.addControl('amount', new FormControl(null, Validators.required));
   }
 
-  removeField(i: { account: string; amount: string }, e: MouseEvent): void {
+  removeField(i: number, e: MouseEvent): void {
     e.preventDefault();
-    if (this.listOfLines.length > 1) {
-      const index = this.listOfLines.indexOf(i);
-      this.listOfLines.splice(index, 1);
-      console.log(this.listOfLines);
-      this.linesForm.removeControl(i.account);
-      this.linesForm.removeControl(i.amount);
+    if (this.lines.length > 2) {
+      this.lines.removeAt(i);
+      console.log(this.lines.value);
     }
-  }
-
-  showAccounts() {
-    this.accounts
-      .getAccounts()
-      .pipe(catchError(this.shared.handleError))
-      .subscribe((data: IAccount[]) => {
-        this.accountsList = data.map(function (a) {
-          console.log(a);
-          return a.fullName;
-        });
-      });
   }
 
   submitForm(): void {
@@ -83,14 +67,12 @@ export class TransactionsAddNewComponent implements OnInit {
     this.transactions
       .addTransaction(this.linesForm.value)
       .pipe(catchError(this.shared.handleError))
-      .subscribe((account: ITransaction) => {
-        // this.added.emit({
-        //   fullName: account.fullName,
-        // });
+      .subscribe((transaction: ITransaction) => {
+        this.added.emit(true);
         this.notification.create(
           'success',
           'Success!',
-          'Account was added successfully',
+          'Transaction successfully added',
         );
         this.linesForm.reset();
         this.isVisible = false;
@@ -100,6 +82,14 @@ export class TransactionsAddNewComponent implements OnInit {
 
   showModal(): void {
     this.isVisible = true;
+    this.accounts
+      .getAccounts()
+      .pipe(catchError(this.shared.handleError))
+      .subscribe((data: IAccount[]) => {
+        this.accountsList = data.map(function (a) {
+          return a.fullName;
+        });
+      });
   }
 
   handleCancel(): void {
@@ -122,9 +112,8 @@ export class TransactionsAddNewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.showAccounts();
     this.linesForm = this.fb.group({
-      date: '',
+      date: ['', Validators.required],
       info: '',
       lines: this.fb.array([this.createItem()]),
     });

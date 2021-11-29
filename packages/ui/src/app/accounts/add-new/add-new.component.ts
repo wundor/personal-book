@@ -27,6 +27,7 @@ export class AccountsAddNewComponent implements OnInit {
   @Output() added: EventEmitter<IAccount> = new EventEmitter<IAccount>();
   inputValue?: string;
   filteredOptions: string[] = [];
+  // accountTypes: string[] = Object.values(ACCOUNT_TYPE);
 
   validateForm!: FormGroup;
 
@@ -42,7 +43,7 @@ export class AccountsAddNewComponent implements OnInit {
         this.notification.create(
           'success',
           'Success!',
-          'Account was added successfully',
+          'Account successfully created!',
         );
         this.validateForm.reset();
         this.isVisible = false;
