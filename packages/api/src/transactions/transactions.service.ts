@@ -1,6 +1,11 @@
-import { EntityRepository } from '@mikro-orm/core';
+import { EntityManager, EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { AccountsService } from 'src/accounts/accounts.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { JournalLine } from './entities/journal_line.entity';
@@ -11,6 +16,8 @@ export class TransactionsService {
   constructor(
     @InjectRepository(Transaction)
     private readonly repo: EntityRepository<Transaction>,
+    @InjectRepository(JournalLine)
+    private readonly lineRepo: EntityRepository<JournalLine>,
     private readonly account: AccountsService,
   ) {}
 
@@ -23,7 +30,9 @@ export class TransactionsService {
     transaction.lines.forEach(async (line) => {
       transactionBalance += line.amount;
       const account = await this.account.findByName(line.account);
-      initTransaction.journal_lines.add(new JournalLine(account, line.amount));
+      const initLine = new JournalLine(account, line.amount);
+      this.lineRepo.persist(initLine);
+      initTransaction.journal_lines.add(initLine);
     });
     Logger.debug(`Lines: ${JSON.stringify(transaction.lines)}`);
     if (transactionBalance !== 0) {
@@ -33,7 +42,7 @@ export class TransactionsService {
     }
     this.repo.persist(initTransaction);
     await this.repo.flush();
-    console.log(initTransaction);
+    await this.lineRepo.flush();
     return initTransaction;
   }
 
@@ -41,14 +50,23 @@ export class TransactionsService {
     return this.repo.findAll();
   }
 
-  // async findOne(id: string): Promise<Transaction> {
-  //   try {
-  //     const account = await this.transactions.findOneOrFail(id);
-  //     return account;
-  //   } catch (err) {
-  //     throw new NotFoundException('Transaction not found');
-  //   }
-  // }
+  async findOne(id: number): Promise<Transaction> {
+    try {
+      const transaction = await this.repo.findOneOrFail(id);
+      await transaction.journal_lines.init();
+      transaction.lines = [];
+      for (const line of transaction.journal_lines) {
+        const account = await this.account.findOne(line.account.id);
+        transaction.lines.push({
+          account: account.fullName,
+          amount: Number(line.amount),
+        });
+      }
+      return transaction;
+    } catch (err) {
+      throw new NotFoundException('Transaction not found');
+    }
+  }
 
   // // async update(id: string, transaction: UpdateTransactionDto): Promise<Transactions> {
   // //   await this.transactions.update(id, transaction);

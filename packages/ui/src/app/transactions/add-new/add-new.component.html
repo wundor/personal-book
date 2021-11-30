@@ -48,6 +48,7 @@
                 nz-input
                 placeholder="account"
                 [nzAutocomplete]="auto"
+                (click)="onChange('')"
                 (ngModelChange)="onChange($event)"
               />
             </nz-form-control>
@@ -56,6 +57,7 @@
         <div nz-col [formGroupName]="i">
           <nz-form-item>
             <input
+              (keyup.control.enter)="submitForm()"
               formControlName="amount"
               type="number"
               class="amount"

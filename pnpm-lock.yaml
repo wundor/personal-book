@@ -7,6 +7,7 @@ importers:
 
   packages/api:
     specifiers:
+      '@mikro-orm/cli': ^4.5.9
       '@mikro-orm/core': ^4.5.9
       '@mikro-orm/migrations': ^4.5.9
       '@mikro-orm/mysql': ^4.5.9
@@ -45,6 +46,7 @@ importers:
       tsconfig-paths: ^3.10.1
       typescript: ^4.3.5
     dependencies:
+      '@mikro-orm/cli': 4.5.9_c75378c294c803e7055d420038ca1eef
       '@mikro-orm/core': 4.5.9_5ae46d24dd2c43a07808d6760579e667
       '@mikro-orm/migrations': 4.5.9_4268bb7a1833a55ab0bfe9503f536301
       '@mikro-orm/mysql': 4.5.9_c5924a60946be4b9f3a0784c71d54059

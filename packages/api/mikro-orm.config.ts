@@ -10,6 +10,14 @@ const config: Options = {
   entities: ['dist/**/*.entity.js'],
   entitiesTs: ['src/**/*.entity.ts'],
   debug: true,
+  migrations: {
+    tableName: 'mikro_orm_migrations',
+    path: './dist/src/migrations',
+    pattern: /^[\w-]+\d+\.js$/,
+    transactional: true,
+    allOrNothing: true,
+    safe: true,
+  },
 };
 
 export default config;

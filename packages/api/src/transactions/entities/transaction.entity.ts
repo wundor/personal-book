@@ -5,7 +5,11 @@ import { JournalLine } from './journal_line.entity';
 
 @Entity()
 export class Transaction extends BaseEntity {
-  @OneToMany(() => JournalLine, (line) => line.transaction)
+  @OneToMany({
+    entity: () => JournalLine,
+    mappedBy: (line: JournalLine) => line.transaction,
+    hidden: true,
+  })
   journal_lines = new Collection<JournalLine>(this);
 
   @IsDefined()
@@ -16,6 +20,12 @@ export class Transaction extends BaseEntity {
   @Property()
   @IsString()
   info: string;
+
+  @Property({ persist: false })
+  lines?: {
+    account: string;
+    amount: number;
+  }[];
 
   //status
   constructor(date: Date, info: string) {

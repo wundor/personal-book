@@ -58,7 +58,6 @@ export class TransactionsAddNewComponent implements OnInit {
     e.preventDefault();
     if (this.lines.length > 2) {
       this.lines.removeAt(i);
-      console.log(this.lines.value);
     }
   }
 

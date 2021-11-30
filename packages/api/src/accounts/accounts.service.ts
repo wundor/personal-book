@@ -44,7 +44,13 @@ export class AccountsService {
 
   async findOne(id: number): Promise<Account> {
     try {
+      let balance = 0;
       const account = await this.repo.findOneOrFail({ id: id });
+      await account.journal_lines.init();
+      for (const line of account.journal_lines) {
+        balance += Number(line.amount);
+      }
+      account.balance = balance;
       return account;
     } catch (err) {
       throw new NotFoundException('Account not found');

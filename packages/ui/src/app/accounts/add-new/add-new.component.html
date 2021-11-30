@@ -12,28 +12,24 @@
     <div *nzModalContent>
       <nz-form-item>
         <nz-form-control nzErrorTip="Should not be empty">
-          <nz-input-group
-            nzPrefixIcon="user"
-            [nzAddOnBefore]="addOnBeforeTemplate"
-          >
+          <nz-input-group nzPrefixIcon="user">
             <nz-autocomplete
               [nzDataSource]="filteredOptions"
               #auto
             ></nz-autocomplete>
+            <!-- TODO: autofocus this input -->
             <input
+              #accountNameInput
+              autofocus
+              (keyup.control.enter)="submitForm()"
               formControlName="fullName"
               nz-input
               placeholder="Account name"
               [(ngModel)]="inputValue"
               (ngModelChange)="onChange($event)"
+              (click)="onChange('')"
               [nzAutocomplete]="auto"
             />
-            <ng-template #addOnBeforeTemplate>
-              <nz-select [ngModel]="'Http://'">
-                <nz-option nzLabel="Http://" nzValue="Http://"></nz-option>
-                <nz-option nzLabel="Https://" nzValue="Https://"></nz-option>
-              </nz-select>
-            </ng-template>
           </nz-input-group>
         </nz-form-control>
       </nz-form-item>
@@ -47,6 +43,9 @@
           <button
             nz-button
             nzType="primary"
+            nz-popover
+            nzPopoverTitle="God mode"
+            nzPopoverContent="Ctrl+Enter to save"
             [disabled]="!validateForm.valid"
             [nzLoading]="isOkLoading"
             (click)="submitForm()"

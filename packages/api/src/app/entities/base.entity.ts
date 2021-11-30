@@ -6,11 +6,11 @@ export class BaseEntity {
   @PrimaryKey()
   id!: number;
 
-  @Property()
+  @Property({ hidden: true })
   @IsDate()
   createdAt: Date = new Date();
 
-  @Property({ onUpdate: () => new Date() })
+  @Property({ hidden: true, onUpdate: () => new Date() })
   @IsDate()
   updatedAt: Date = new Date();
 }

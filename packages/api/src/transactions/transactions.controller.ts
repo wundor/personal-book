@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  ParseIntPipe,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 
@@ -16,7 +25,12 @@ export class TransactionsController {
     return this.service.findAll();
   }
 
-  // @Get(':id')
+  @Get(':id')
+  findOneById(@Param('id', ParseIntPipe) id: number) {
+    return this.service.findOne(id);
+  }
+
+  // @Get(':id)
   // findOne(@Param('id') id: string) {
   //   return this.service.findOne(id);
   // }

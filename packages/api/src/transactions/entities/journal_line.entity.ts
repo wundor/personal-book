@@ -3,16 +3,19 @@ import { IsDefined, IsNumber } from 'class-validator';
 import { Account } from '../../accounts/entities/account.entity';
 import { BaseEntity } from '../..//app/entities/base.entity';
 import { Transaction } from './transaction.entity';
+import { Type } from 'class-transformer';
 
 @Entity()
 export class JournalLine extends BaseEntity {
   @IsDefined()
   @ManyToOne({ entity: () => Transaction })
+  @Type(() => Transaction)
   @IsNumber()
   transaction!: Transaction;
 
   @IsDefined()
   @ManyToOne({ entity: () => Account })
+  @Type(() => Account)
   @IsNumber()
   account!: Account;
 

@@ -15,6 +15,7 @@ import { SharedModule } from '../shared/shared.module';
 import { IconsProviderModule } from '../icons-provider.module';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 @NgModule({
   imports: [
@@ -32,6 +33,7 @@ import { NzSelectModule } from 'ng-zorro-antd/select';
     SharedModule,
     IconsProviderModule,
     NzInputModule,
+    NzPopoverModule,
     NzSelectModule,
   ],
   declarations: [AccountsListComponent, AccountsAddNewComponent],
