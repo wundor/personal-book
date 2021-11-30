@@ -27,7 +27,6 @@ export class Transaction extends BaseEntity {
     amount: number;
   }[];
 
-  //status
   constructor(date: Date, info: string) {
     super();
     this.date = date;

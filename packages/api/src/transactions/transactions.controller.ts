@@ -5,8 +5,6 @@ import {
   Body,
   Param,
   ParseIntPipe,
-  UseInterceptors,
-  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
