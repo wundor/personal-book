@@ -4,11 +4,6 @@
       "jest",
       "node"
     ],
-    "paths": {
-      "@pb/lib": [
-        "../lib/src"
-      ]
-    },
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,

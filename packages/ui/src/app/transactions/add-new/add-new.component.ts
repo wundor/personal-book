@@ -12,7 +12,11 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { IAccount, ITransaction } from '@pb/lib/src';
+import { IAccount } from '@pb/api/src/interfaces/accounts.interface';
+import {
+  IJournalLine,
+  ITransaction,
+} from '@pb/api/src/interfaces/transactions.interface';
 import { TransactionsService } from '../transactions.service';
 import { catchError } from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
@@ -37,10 +41,7 @@ export class TransactionsAddNewComponent implements OnInit {
 
   date = null;
 
-  listOfLines: Array<{
-    account: string;
-    amount: string;
-  }> = [];
+  listOfLines: Array<IJournalLine> = [];
 
   addField(e?: MouseEvent): void {
     if (e) {

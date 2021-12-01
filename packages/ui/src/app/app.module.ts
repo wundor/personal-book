@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AccountsModule } from './accounts/accounts.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { SharedModule } from './shared/shared.module';
+import { ReportsModule } from './reports/reports.module';
 
 registerLocaleData(en);
 
@@ -31,6 +32,7 @@ registerLocaleData(en);
     IconsProviderModule,
     AccountsModule,
     TransactionsModule,
+    ReportsModule,
     SharedModule,
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }, Title],

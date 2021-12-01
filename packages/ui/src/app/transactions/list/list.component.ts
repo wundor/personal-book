@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TransactionsService } from '../transactions.service';
-import { ITransaction } from '@pb/lib/src';
+import { ITransaction } from '@pb/api/src/interfaces/transactions.interface';
 import { NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { Title } from '@angular/platform-browser';
 

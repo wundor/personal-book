@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountsService } from '../accounts.service';
-import { IAccount } from '@pb/lib/src';
+import { IAccount } from '@pb/api/src/interfaces/accounts.interface';
 import { catchError } from 'rxjs/operators';
 import { SharedService } from 'src/app/shared/shared.service';
 import { Title } from '@angular/platform-browser';

@@ -1,4 +1,3 @@
-import { ITransaction } from '@pb/lib/src';
 import { Type } from 'class-transformer';
 import {
   ArrayMinSize,
@@ -9,8 +8,12 @@ import {
   IsString,
   ValidateNested,
 } from 'class-validator';
+import {
+  IJournalLine,
+  ITransaction,
+} from 'src/interfaces/transactions.interface';
 
-export class JournalLineDto {
+export class JournalLineDto implements IJournalLine {
   @IsNotEmpty()
   @IsString()
   account!: string;

@@ -19,7 +19,6 @@ importers:
       '@nestjs/platform-express': ^8.0.0
       '@nestjs/schematics': ^8.0.0
       '@nestjs/testing': ^8.2.3
-      '@pb/lib': workspace:^1.0.0
       '@types/express': ^4.17.13
       '@types/jest': ^27.0.2
       '@types/node': ^16.0.0
@@ -55,7 +54,6 @@ importers:
       '@nestjs/core': 8.2.3_1864eb04cdb557d7ef263925d28b0dee
       '@nestjs/mapped-types': 1.0.0_29ba0cf13bb270fa684f7822ce26a484
       '@nestjs/platform-express': 8.2.3_4e195730d90113ce1578bd999274c7a8
-      '@pb/lib': link:../lib
       class-transformer: 0.4.0
       class-validator: 0.13.2
       mikro-orm: 4.5.9_c75378c294c803e7055d420038ca1eef
@@ -86,9 +84,6 @@ importers:
       tsconfig-paths: 3.12.0
       typescript: 4.5.2
 
-  packages/lib:
-    specifiers: {}
-
   packages/ui:
     specifiers:
       '@angular-devkit/build-angular': ~12.2.13
@@ -108,7 +103,7 @@ importers:
       '@angular/platform-browser-dynamic': ~12.2.0
       '@angular/router': ~12.2.0
       '@ant-design/icons-angular': ^12.0.3
-      '@pb/lib': workspace:^1.0.0
+      '@pb/api': workspace:^1.0.0
       '@types/jasmine': ~3.8.0
       '@types/node': ^12.11.1
       '@typescript-eslint/eslint-plugin': 4.28.2
@@ -148,7 +143,7 @@ importers:
       '@angular-eslint/template-parser': 12.7.0_eslint@7.32.0+typescript@4.3.5
       '@angular/cli': 12.2.13
       '@angular/compiler-cli': 12.2.13_aac1e49e6604a7b98f0db78ff98dd5d4
-      '@pb/lib': link:../lib
+      '@pb/api': link:../api
       '@types/jasmine': 3.8.2
       '@types/node': 12.20.37
       '@typescript-eslint/eslint-plugin': 4.28.2_4a5ef739d939440fcd1d721a2e293613
@@ -8756,6 +8751,7 @@ packages:
   /make-dir/2.1.0:
     resolution: {integrity: sha512-LS9X+dc8KLxXCb8dni79fLIIUA5VyZoyjSMCwTluaXA0o27cCK0bhXkpgw+sTXVpPy/lSO57ilRixqk0vDmtRA==}
     engines: {node: '>=6'}
+    requiresBuild: true
     dependencies:
       pify: 4.0.1
       semver: 5.7.1

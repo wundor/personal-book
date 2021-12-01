@@ -5,9 +5,15 @@ import { AccountsModule } from '../accounts/accounts.module';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ReportsModule } from 'src/reports/reports.module';
 
 @Module({
-  imports: [MikroOrmModule.forRoot({}), AccountsModule, TransactionsModule],
+  imports: [
+    MikroOrmModule.forRoot({}),
+    AccountsModule,
+    TransactionsModule,
+    ReportsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

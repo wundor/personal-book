@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment as env } from '../../environments/environment';
 import { Observable } from 'rxjs';
-import { ITransaction } from '@pb/lib/src';
+import { ITransaction } from '@pb/api/src/interfaces/transactions.interface';
 
 @Injectable()
 export class TransactionsService {

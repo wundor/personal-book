@@ -9,11 +9,11 @@ import {
   ElementRef,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { IAccount } from '@pb/lib/src';
 import { AccountsService } from '../accounts.service';
 import { catchError } from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { SharedService } from 'src/app/shared/shared.service';
+import { IAccount } from '@pb/api/src/interfaces/accounts.interface';
 
 @Component({
   selector: 'app-accounts-add-new',
@@ -29,7 +29,6 @@ export class AccountsAddNewComponent implements OnInit {
   @Output() added: EventEmitter<IAccount> = new EventEmitter<IAccount>();
   inputValue?: string;
   filteredOptions: string[] = [];
-  // accountTypes: string[] = Object.values(ACCOUNT_TYPE);
 
   validateForm!: FormGroup;
 

@@ -1,0 +1,30 @@
+<div style="background: #ececec; padding: 30px">
+  <nz-row [nzGutter]="16">
+    <nz-col [nzSpan]="8">
+      <nz-card>
+        <nz-statistic
+          [nzValue]="(result.assets | number: '1.0-2')!"
+          [nzTitle]="'Assets'"
+          [nzValueStyle]="{ color: '#3F8600' }"
+        ></nz-statistic>
+      </nz-card>
+    </nz-col>
+    <nz-col [nzSpan]="8">
+      <nz-card>
+        <nz-statistic
+          [nzValue]="(result.total | number: '1.0-2')!"
+          [nzTitle]="'Total'"
+        ></nz-statistic>
+      </nz-card>
+    </nz-col>
+    <nz-col [nzSpan]="8">
+      <nz-card>
+        <nz-statistic
+          [nzValue]="(result.liabilities | number: '1.0-2')!"
+          [nzTitle]="'Liabilities'"
+          [nzValueStyle]="{ color: '#CF1322' }"
+        ></nz-statistic>
+      </nz-card>
+    </nz-col>
+  </nz-row>
+</div>

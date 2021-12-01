@@ -14,6 +14,7 @@
         [nzSortOrder]="column.sortOrder"
         [nzSortFn]="column.sortFn"
         [nzSortDirections]="column.sortDirections"
+        nzWidth="50px"
       >
         {{ column.name }}
       </th>
@@ -25,7 +26,7 @@
       <td>{{ data.date.toString().substring(0, 10) }}</td>
       <td>{{ data.info }}</td>
       <td>
-        <a>Delete</a>
+        <a disabled>Edit</a>
       </td>
     </tr>
   </tbody>

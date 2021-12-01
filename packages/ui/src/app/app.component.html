@@ -3,6 +3,8 @@
   <nz-sider
     class="menu-sidebar"
     nzCollapsible
+    nzBreakpoint="lg"
+    [nzCollapsedWidth]="0"
     nzWidth="256px"
     nzBreakpoint="md"
     [(nzCollapsed)]="isCollapsed"
@@ -30,7 +32,7 @@
         <li nz-menu-item nzMatchRouter [nzDisabled]="true">
           <a routerLink="/budget">Budget</a>
         </li>
-        <li nz-menu-item nzMatchRouter [nzDisabled]="true">
+        <li nz-menu-item nzMatchRouter>
           <a routerLink="/reports">Reports</a>
         </li>
       </ul>
