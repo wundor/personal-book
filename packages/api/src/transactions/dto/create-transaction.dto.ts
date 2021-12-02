@@ -5,9 +5,13 @@ import {
   IsDate,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
+import { Account } from 'src/accounts/entities/account.entity';
+import { IAccount } from 'src/interfaces/accounts.interface';
 import {
   IJournalLine,
   ITransaction,
@@ -15,8 +19,13 @@ import {
 
 export class JournalLineDto implements IJournalLine {
   @IsNotEmpty()
+  @ValidateIf((o) => o.accountName == null)
+  @Type(() => Account)
+  account: IAccount;
+
+  @IsOptional()
   @IsString()
-  account!: string;
+  accountName: string;
 
   @IsNotEmpty()
   @IsNumber({
@@ -38,4 +47,7 @@ export class CreateTransactionDto implements ITransaction {
   @Type(() => JournalLineDto)
   @ValidateNested({ each: true })
   lines!: JournalLineDto[];
+
+  // only to implement interface
+  id: number;
 }

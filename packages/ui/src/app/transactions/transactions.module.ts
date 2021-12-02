@@ -15,10 +15,13 @@ import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { IconsProviderModule } from '../icons-provider.module';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+import { NzPopoverModule } from 'ng-zorro-antd/popover';
 
 @NgModule({
   imports: [
     TransactionsRoutingModule,
+    IconsProviderModule,
     NzTableModule,
     NzDividerModule,
     CommonModule,
@@ -32,7 +35,8 @@ import { IconsProviderModule } from '../icons-provider.module';
     SharedModule,
     NzDatePickerModule,
     NzGridModule,
-    IconsProviderModule,
+    NzSpaceModule,
+    NzPopoverModule,
   ],
   declarations: [TransactionsListComponent, TransactionsAddNewComponent],
   exports: [],

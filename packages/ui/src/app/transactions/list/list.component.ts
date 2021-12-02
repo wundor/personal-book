@@ -18,6 +18,26 @@ interface ColumnItem {
   styleUrls: ['./list.component.less'],
 })
 export class TransactionsListComponent implements OnInit {
+  expandSet = new Set<number>();
+
+  toggleExpandAll(id: number): void {
+    if (this.expandSet.has(id)) {
+      this.expandSet.clear();
+    } else {
+      this.transactions.forEach((transaction) => {
+        this.expandSet.add(transaction.id);
+      });
+    }
+  }
+
+  onExpandChange(id: number, checked: boolean): void {
+    if (checked) {
+      this.expandSet.add(id);
+    } else {
+      this.expandSet.delete(id);
+    }
+  }
+
   transactions: ITransaction[] = [];
 
   listOfColumns: ColumnItem[] = [

@@ -12,13 +12,12 @@ import { JournalLine } from '../../transactions/entities/journal_line.entity';
 
 @Entity()
 export class Account extends BaseEntity {
-  @Exclude()
   @OneToMany({
     entity: () => JournalLine,
     mappedBy: (line: JournalLine) => line.account,
     hidden: true,
   })
-  journal_lines = new Collection<JournalLine>(this);
+  lines = new Collection<JournalLine>(this);
 
   @Property()
   @IsString()

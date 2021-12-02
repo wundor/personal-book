@@ -6,7 +6,12 @@
   (added)="showTransactions()"
 ></app-transactions-add-new>
 
-<nz-table #transactionsTable [nzData]="transactions">
+<nz-table
+  #transactionsTable
+  nzSize="small"
+  [nzFrontPagination]="false"
+  [nzData]="transactions"
+>
   <thead>
     <tr>
       <th
@@ -18,16 +23,49 @@
       >
         {{ column.name }}
       </th>
+      <th nzWidth="20px">
+        <button
+          nz-button
+          nzSize="small"
+          (click)="toggleExpandAll(transactionsTable.data[0].id)"
+        >
+          +
+        </button>
+      </th>
       <th>Info</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let data of transactionsTable.data">
-      <td>{{ data.date.toString().substring(0, 10) }}</td>
-      <td>{{ data.info }}</td>
-      <td>
-        <a disabled>Edit</a>
-      </td>
-    </tr>
+    <ng-container *ngFor="let data of transactionsTable.data">
+      <tr>
+        <td>{{ data.date.toString().substring(0, 10) }}</td>
+        <td
+          [nzExpand]="expandSet.has(data.id)"
+          (nzExpandChange)="onExpandChange(data.id, $event)"
+        ></td>
+        <td>{{ data.info }}</td>
+        <td>
+          <a disabled>Edit</a>
+        </td>
+      </tr>
+      <tr [nzExpand]="expandSet.has(data.id)">
+        <nz-row *ngFor="let line of data.lines">
+          <nz-col nzSpan="6">
+            {{ line.account.fullName }}
+          </nz-col>
+          <nz-col>
+            <div>
+              <span class="int">{{
+                line.amount.toString().split('.')[0]
+              }}</span>
+              <span *ngIf="line.amount.toString().split('.')[1]">.</span>
+              <span class="float">{{
+                line.amount.toString().split('.')[1]
+              }}</span>
+            </div>
+          </nz-col>
+        </nz-row>
+      </tr>
+    </ng-container>
   </tbody>
 </nz-table>

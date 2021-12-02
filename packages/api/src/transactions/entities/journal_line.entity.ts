@@ -20,7 +20,11 @@ export class JournalLine extends BaseEntity {
   account!: Account;
 
   @IsDefined()
-  @Property({ columnType: 'DECIMAL(17,8)' })
+  @Property({
+    columnType: 'DECIMAL(17,8)',
+    serializer: (value) => Number(value),
+  })
+  @Type(() => Number)
   amount!: number;
 
   constructor(account: Account, amount: number) {

@@ -46,8 +46,8 @@ export class AccountsService {
     try {
       let balance = 0;
       const account = await this.repo.findOneOrFail({ id: id });
-      await account.journal_lines.init();
-      for (const line of account.journal_lines) {
+      await account.lines.init();
+      for (const line of account.lines) {
         balance += Number(line.amount);
       }
       account.balance = balance;
@@ -73,7 +73,7 @@ export class AccountsService {
       });
       return account;
     } catch (err) {
-      throw new NotFoundException('Account with that name was not found');
+      throw new NotFoundException(`Account '${name}' was not found`);
     }
   }
 

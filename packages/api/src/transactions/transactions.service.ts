@@ -1,8 +1,9 @@
-import { EntityManager, EntityRepository } from '@mikro-orm/core';
+import { EntityRepository } from '@mikro-orm/core';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -22,46 +23,48 @@ export class TransactionsService {
   ) {}
 
   async create(transaction: CreateTransactionDto): Promise<Transaction> {
-    const initTransaction = new Transaction(
-      new Date(transaction.date),
-      transaction.info,
-    );
-    let transactionBalance = 0;
-    transaction.lines.forEach(async (line) => {
-      transactionBalance += line.amount;
-      const account = await this.account.findByName(line.account);
-      const initLine = new JournalLine(account, line.amount);
-      this.lineRepo.persist(initLine);
-      initTransaction.journal_lines.add(initLine);
-    });
-    Logger.debug(`Lines: ${JSON.stringify(transaction.lines)}`);
-    if (transactionBalance !== 0) {
-      const message = `Transaction '${transaction.info}' is not balanced! ${transactionBalance} != 0`;
-      Logger.error(message);
-      throw new BadRequestException(message);
+    try {
+      const initTransaction = new Transaction(
+        new Date(transaction.date),
+        transaction.info,
+      );
+      let transactionBalance = 0;
+      // forEach() will swallow exception
+      for (let i = 0; i < transaction.lines.length; i++) {
+        console.log(transaction.lines[i]);
+        transactionBalance += transaction.lines[i].amount;
+        const account = await this.account.findByName(
+          transaction.lines[i].accountName,
+        );
+        const initLine = new JournalLine(account, transaction.lines[i].amount);
+        this.lineRepo.persist(initLine);
+        initTransaction.lines.add(initLine);
+      }
+      Logger.debug(`Lines: ${JSON.stringify(transaction.lines)}`);
+      if (transactionBalance !== 0) {
+        const message = `Transaction '${transaction.info}' is not balanced! ${transactionBalance} != 0`;
+        Logger.error(message);
+        throw new BadRequestException(message);
+      }
+      this.repo.persist(initTransaction);
+      await this.repo.flush();
+      await this.lineRepo.flush();
+      return initTransaction;
+    } catch (e) {
+      Logger.log(e);
+      throw new InternalServerErrorException(
+        'Unable to create transaction. Please check application logs',
+      );
     }
-    this.repo.persist(initTransaction);
-    await this.repo.flush();
-    await this.lineRepo.flush();
-    return initTransaction;
   }
 
   async findAll(): Promise<Transaction[]> {
-    return this.repo.findAll();
+    return this.repo.findAll(['lines', 'lines.account']);
   }
 
   async findOne(id: number): Promise<Transaction> {
     try {
-      const transaction = await this.repo.findOneOrFail(id);
-      await transaction.journal_lines.init();
-      transaction.lines = [];
-      for (const line of transaction.journal_lines) {
-        const account = await this.account.findOne(line.account.id);
-        transaction.lines.push({
-          account: account.fullName,
-          amount: Number(line.amount),
-        });
-      }
+      const transaction = await this.repo.findOneOrFail(id, ['lines']);
       return transaction;
     } catch (err) {
       throw new NotFoundException('Transaction not found');

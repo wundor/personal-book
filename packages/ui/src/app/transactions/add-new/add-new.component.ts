@@ -51,7 +51,10 @@ export class TransactionsAddNewComponent implements OnInit {
     this.lines = this.linesForm.get('lines') as FormArray;
     const newItem = this.createItem();
     this.lines.push(newItem);
-    newItem.addControl('account', new FormControl(null, Validators.required));
+    newItem.addControl(
+      'accountName',
+      new FormControl(null, Validators.required),
+    );
     newItem.addControl('amount', new FormControl(null, Validators.required));
   }
 
@@ -98,7 +101,7 @@ export class TransactionsAddNewComponent implements OnInit {
 
   createItem(): FormGroup {
     return this.fb.group({
-      account: '',
+      accountName: '',
       amount: '',
     });
   }
