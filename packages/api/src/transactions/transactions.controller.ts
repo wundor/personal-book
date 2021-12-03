@@ -5,9 +5,11 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { SearchTransactionDto } from './dto/search-transaction.dto';
 
 @Controller('transactions')
 export class TransactionsController {
@@ -19,8 +21,8 @@ export class TransactionsController {
   }
 
   @Get()
-  findAll() {
-    return this.service.findAll();
+  findAll(@Query() query: SearchTransactionDto) {
+    return this.service.findAll(query);
   }
 
   @Get(':id')

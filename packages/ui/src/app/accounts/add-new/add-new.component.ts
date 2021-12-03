@@ -12,7 +12,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountsService } from '../accounts.service';
 import { catchError } from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
-import { SharedService } from 'src/app/shared/shared.service';
+import { ApiService } from 'src/app/shared/api.service';
 import { IAccount } from '@pb/api/src/interfaces/accounts.interface';
 
 @Component({
@@ -64,7 +64,7 @@ export class AccountsAddNewComponent implements OnInit {
     private fb: FormBuilder,
     private accountsService: AccountsService,
     private notification: NzNotificationService,
-    private shared: SharedService,
+    private shared: ApiService,
   ) {
     this.filteredOptions = this.accountList;
   }

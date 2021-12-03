@@ -8,7 +8,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AccountsService } from 'src/accounts/accounts.service';
+import { PERIOD_MONTH, PERIOD_ALL } from 'src/interfaces/requests.interface';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { SearchTransactionDto } from './dto/search-transaction.dto';
 import { JournalLine } from './entities/journal_line.entity';
 import { Transaction } from './entities/transaction.entity';
 
@@ -31,7 +33,6 @@ export class TransactionsService {
       let transactionBalance = 0;
       // forEach() will swallow exception
       for (let i = 0; i < transaction.lines.length; i++) {
-        console.log(transaction.lines[i]);
         transactionBalance += transaction.lines[i].amount;
         const account = await this.account.findByName(
           transaction.lines[i].accountName,
@@ -58,8 +59,23 @@ export class TransactionsService {
     }
   }
 
-  async findAll(): Promise<Transaction[]> {
-    return this.repo.findAll(['lines', 'lines.account']);
+  async findAll(query: SearchTransactionDto): Promise<Transaction[]> {
+    if (query.period === PERIOD_ALL) {
+      return await this.repo.findAll(['lines', 'lines.account']);
+    } else if (query.period === PERIOD_MONTH) {
+      const date = new Date();
+      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+      return await this.repo.find(
+        {
+          date: {
+            $gte: firstDay,
+            $lte: lastDay,
+          },
+        },
+        ['lines', 'lines.account'],
+      );
+    }
   }
 
   async findOne(id: number): Promise<Transaction> {

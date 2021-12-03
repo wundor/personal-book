@@ -12,30 +12,45 @@ import { AppRoutingModule } from './app-routing.module';
 import { IconsProviderModule } from './icons-provider.module';
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AccountsModule } from './accounts/accounts.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { SharedModule } from './shared/shared.module';
 import { ReportsModule } from './reports/reports.module';
+import { environment } from '../environments/environment';
+import { APIInterceptor, ApiService } from './shared/api.service';
+import { NzGridModule } from 'ng-zorro-antd/grid';
+import { NzSelectModule } from 'ng-zorro-antd/select';
 
 registerLocaleData(en);
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
+    SharedModule,
     AppRoutingModule,
-    NzLayoutModule,
-    NzMenuModule,
-    IconsProviderModule,
     AccountsModule,
     TransactionsModule,
     ReportsModule,
-    SharedModule,
+    BrowserModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    NzLayoutModule,
+    NzMenuModule,
+    IconsProviderModule,
+    NzGridModule,
+    NzSelectModule,
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }, Title],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: APIInterceptor,
+      multi: true,
+    },
+    { provide: 'BASE_API_URL', useValue: environment.apiUrl },
+    { provide: NZ_I18N, useValue: en_US },
+    Title,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

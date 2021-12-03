@@ -21,12 +21,12 @@ import { TransactionsService } from '../transactions.service';
 import { catchError } from 'rxjs/operators';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
 import { AccountsService } from 'src/app/accounts/accounts.service';
-import { SharedService } from 'src/app/shared/shared.service';
+import { ApiService } from 'src/app/shared/api.service';
 
 @Component({
   selector: 'app-transactions-add-new',
   templateUrl: './add-new.component.html',
-  providers: [TransactionsService, AccountsService, SharedService],
+  providers: [TransactionsService, AccountsService, ApiService],
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./add-new.component.less'],
 })
@@ -111,7 +111,7 @@ export class TransactionsAddNewComponent implements OnInit {
     private transactions: TransactionsService,
     private notification: NzNotificationService,
     private accounts: AccountsService,
-    private shared: SharedService,
+    private shared: ApiService,
   ) {}
 
   ngOnInit(): void {

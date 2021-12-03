@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { AccountsService } from '../accounts.service';
 import { IAccount } from '@pb/api/src/interfaces/accounts.interface';
 import { catchError } from 'rxjs/operators';
-import { SharedService } from 'src/app/shared/shared.service';
+import { ApiService } from 'src/app/shared/api.service';
 import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-accounts-list',
   templateUrl: './list.component.html',
-  providers: [AccountsService, SharedService],
+  providers: [AccountsService, ApiService],
   styleUrls: ['./list.component.less'],
 })
 export class AccountsListComponent implements OnInit {
@@ -29,7 +29,7 @@ export class AccountsListComponent implements OnInit {
 
   constructor(
     private accountsService: AccountsService,
-    private shared: SharedService,
+    private shared: ApiService,
     private title: Title,
   ) {}
 

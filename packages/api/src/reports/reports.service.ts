@@ -12,6 +12,7 @@ export class ReportsService {
     private readonly accountsRepo: EntityRepository<Account>,
     private readonly account: AccountsService,
   ) {}
+
   async getNetWorth(): Promise<INetWorth> {
     // get all assets balance
     // get all liabilities balance

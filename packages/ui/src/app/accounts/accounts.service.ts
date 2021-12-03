@@ -9,10 +9,10 @@ export class AccountsService {
   constructor(private http: HttpClient) {}
 
   getAccounts(): Observable<IAccount[]> {
-    return this.http.get<IAccount[]>(`${env.apiUrl}/accounts`);
+    return this.http.get<IAccount[]>(`accounts`);
   }
 
   addAccount(account: IAccount): Observable<IAccount> {
-    return this.http.post<IAccount>(`${env.apiUrl}/accounts`, account);
+    return this.http.post<IAccount>(`accounts`, account);
   }
 }
