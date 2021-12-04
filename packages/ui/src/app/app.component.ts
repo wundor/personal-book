@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { environment as env } from '../environments/environment';
-import { ApiService } from './shared/api.service';
+import { PeriodService } from './shared/period.service';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +9,15 @@ import { ApiService } from './shared/api.service';
   styleUrls: ['./app.component.less'],
 })
 export class AppComponent {
-  public constructor(private titleService: Title, private shared: ApiService) {}
+  public constructor(
+    private titleService: Title,
+    private period: PeriodService,
+  ) {}
   home = env.baseUrl;
 
-  setPeriod(p: string) {
-    this.shared.period = p;
+  setPeriod(p: any) {
+    console.log(p);
+    this.period.changePeriod(p);
   }
 
   isCollapsed = false;

@@ -26,7 +26,7 @@ import { ApiService } from 'src/app/shared/api.service';
 @Component({
   selector: 'app-transactions-add-new',
   templateUrl: './add-new.component.html',
-  providers: [TransactionsService, AccountsService, ApiService],
+  providers: [TransactionsService, AccountsService],
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./add-new.component.less'],
 })
@@ -38,8 +38,6 @@ export class TransactionsAddNewComponent implements OnInit {
   filteredOptions: string[] = [];
   linesForm!: FormGroup;
   lines!: FormArray;
-
-  date = null;
 
   listOfLines: Array<IJournalLine> = [];
 
@@ -83,7 +81,8 @@ export class TransactionsAddNewComponent implements OnInit {
     this.isOkLoading = false;
   }
 
-  showModal(): void {
+  showModal(t?: ITransaction): void {
+    this.linesForm.reset();
     this.isVisible = true;
     this.accounts
       .getAccounts()
@@ -93,17 +92,37 @@ export class TransactionsAddNewComponent implements OnInit {
           return a.fullName;
         });
       });
+    if (t) {
+      this.generateEditForm(t);
+    }
   }
 
   handleCancel(): void {
     this.isVisible = false;
   }
 
-  createItem(): FormGroup {
+  createItem(data?: {
+    account: { fullName: string };
+    amount: number;
+  }): FormGroup {
     return this.fb.group({
-      accountName: '',
-      amount: '',
+      accountName: data?.account.fullName || '',
+      amount: data?.amount || '',
     });
+  }
+
+  generateEditForm(transaction: ITransaction): void {
+    this.linesForm.reset();
+    this.lines.clear();
+    this.linesForm.patchValue({
+      date: transaction.date,
+      info: transaction.info,
+    });
+    const lines = this.linesForm.get('lines') as FormArray;
+    for (const line of transaction.lines) {
+      console.log(line);
+      lines.push(this.createItem(line));
+    }
   }
 
   constructor(
@@ -115,8 +134,9 @@ export class TransactionsAddNewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const date = new Date();
     this.linesForm = this.fb.group({
-      date: ['', Validators.required],
+      date: [date, Validators.required],
       info: '',
       lines: this.fb.array([this.createItem()]),
     });

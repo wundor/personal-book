@@ -11,7 +11,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import { AccountsAddNewComponent } from './add-new/add-new.component';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
-import { SharedModule } from '../shared/shared.module';
 import { IconsProviderModule } from '../icons-provider.module';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
@@ -30,7 +29,6 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
     ReactiveFormsModule,
     NzNotificationModule,
     NzAutocompleteModule,
-    SharedModule,
     IconsProviderModule,
     NzInputModule,
     NzPopoverModule,

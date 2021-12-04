@@ -7,7 +7,12 @@
   [accountList]="accountsList"
 ></app-accounts-add-new>
 
-<nz-table #accountsTable [nzData]="accounts">
+<nz-table
+  #accountsTable
+  [nzData]="accounts"
+  nzSize="small"
+  [nzFrontPagination]="false"
+>
   <thead>
     <tr>
       <th>Name</th>

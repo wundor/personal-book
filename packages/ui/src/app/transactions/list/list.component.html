@@ -45,7 +45,7 @@
         ></td>
         <td>{{ data.info }}</td>
         <td>
-          <a disabled>Edit</a>
+          <a (click)="addNew.showModal(data)">Edit</a>
         </td>
       </tr>
       <tr [nzExpand]="expandSet.has(data.id)">
@@ -54,7 +54,10 @@
             {{ line.account.fullName }}
           </nz-col>
           <nz-col>
-            <div>
+            <span
+              nz-typography
+              [nzType]="line.amount > 0 ? 'success' : 'danger'"
+            >
               <span class="int">{{
                 line.amount.toString().split('.')[0]
               }}</span>
@@ -62,7 +65,7 @@
               <span class="float">{{
                 line.amount.toString().split('.')[1]
               }}</span>
-            </div>
+            </span>
           </nz-col>
         </nz-row>
       </tr>

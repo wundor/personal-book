@@ -9,6 +9,6 @@ export interface ITransaction {
 
 export interface IJournalLine {
   account: IAccount;
-  accountName?: string;
+  accountName: string;
   amount: number;
 }

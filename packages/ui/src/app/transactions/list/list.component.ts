@@ -3,6 +3,7 @@ import { TransactionsService } from '../transactions.service';
 import { ITransaction } from '@pb/api/src/interfaces/transactions.interface';
 import { NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { Title } from '@angular/platform-browser';
+import { PeriodService } from 'src/app/shared/period.service';
 
 interface ColumnItem {
   name: string;
@@ -57,7 +58,15 @@ export class TransactionsListComponent implements OnInit {
     });
   }
 
-  constructor(private listService: TransactionsService, private title: Title) {}
+  constructor(
+    private listService: TransactionsService,
+    private title: Title,
+    private period: PeriodService,
+  ) {
+    this.period.periodChanged$.subscribe((value) => {
+      this.showTransactions();
+    });
+  }
 
   ngOnInit(): void {
     this.showTransactions();

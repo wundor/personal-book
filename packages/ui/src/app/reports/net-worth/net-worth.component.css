@@ -1,3 +1,6 @@
 .ant-statistic {
   text-align: center;
 }
+.ant-card-body {
+  padding: 14px;
+}

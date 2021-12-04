@@ -9,8 +9,8 @@
         <div nz-col>
           <nz-form-item>
             <nz-form-control nzErrorTip="Should not be empty">
+              <!-- [(ngModel)]="date" -->
               <nz-date-picker
-                [(ngModel)]="date"
                 type="date"
                 formControlName="date"
               ></nz-date-picker>
@@ -29,7 +29,6 @@
         </div>
       </div>
 
-      <!-- <div nz-row *ngFor="let line of listOfLines; let i = index"> -->
       <div
         nz-row
         formArrayName="lines"

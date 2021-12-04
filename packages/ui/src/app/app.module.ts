@@ -15,10 +15,9 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AccountsModule } from './accounts/accounts.module';
 import { TransactionsModule } from './transactions/transactions.module';
-import { SharedModule } from './shared/shared.module';
 import { ReportsModule } from './reports/reports.module';
 import { environment } from '../environments/environment';
-import { APIInterceptor, ApiService } from './shared/api.service';
+import { APIInterceptor } from './shared/api.service';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 
@@ -27,7 +26,6 @@ registerLocaleData(en);
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    SharedModule,
     AppRoutingModule,
     AccountsModule,
     TransactionsModule,

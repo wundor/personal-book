@@ -10,13 +10,13 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { SharedModule } from '../shared/shared.module';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
 import { NzGridModule } from 'ng-zorro-antd/grid';
 import { IconsProviderModule } from '../icons-provider.module';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @NgModule({
   imports: [
@@ -32,11 +32,11 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
     ReactiveFormsModule,
     NzNotificationModule,
     NzAutocompleteModule,
-    SharedModule,
     NzDatePickerModule,
     NzGridModule,
     NzSpaceModule,
     NzPopoverModule,
+    NzTypographyModule,
   ],
   declarations: [TransactionsListComponent, TransactionsAddNewComponent],
   exports: [],

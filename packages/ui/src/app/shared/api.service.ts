@@ -9,11 +9,10 @@ import {
 import { Inject, Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { PeriodService } from './period.service';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
-  period: string = 'month';
-
   handleError = (error: HttpErrorResponse) => {
     if (error.status === 0) {
       this.notification.create(
@@ -38,7 +37,7 @@ export class ApiService {
 export class APIInterceptor implements HttpInterceptor {
   constructor(
     @Inject('BASE_API_URL') private baseUrl: string,
-    private shared: ApiService,
+    private period: PeriodService,
   ) {}
 
   intercept(
@@ -49,7 +48,7 @@ export class APIInterceptor implements HttpInterceptor {
       url: `${this.baseUrl}/${request.url}`,
       params: (request.params ? request.params : new HttpParams()).set(
         'period',
-        this.shared.period,
+        this.period.period,
       ),
     });
     return next.handle(apiReq);
