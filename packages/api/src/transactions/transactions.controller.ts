@@ -6,10 +6,12 @@ import {
   Param,
   ParseIntPipe,
   Query,
+  Patch,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { SearchTransactionDto } from './dto/search-transaction.dto';
+import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
 @Controller('transactions')
 export class TransactionsController {
@@ -30,15 +32,13 @@ export class TransactionsController {
     return this.service.findOne(id);
   }
 
-  // @Get(':id)
-  // findOne(@Param('id') id: string) {
-  //   return this.service.findOne(id);
-  // }
-
-  // // @Patch(':id')
-  // // update(@Param('id') id: string, @Body() transaction: UpdateTransactionDto) {
-  // //   return this.service.update(id, transaction);
-  // // }
+  @Patch(':id')
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() transaction: UpdateTransactionDto,
+  ) {
+    return this.service.update(id, transaction);
+  }
 
   // @Delete(':id')
   // remove(@Param('id') id: string) {

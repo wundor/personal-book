@@ -16,7 +16,6 @@ export class AppComponent {
   home = env.baseUrl;
 
   setPeriod(p: any) {
-    console.log(p);
     this.period.changePeriod(p);
   }
 

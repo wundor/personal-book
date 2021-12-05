@@ -5,17 +5,18 @@ import {
   OneToMany,
   Unique,
 } from '@mikro-orm/core';
-import { Exclude } from 'class-transformer';
+import {} from 'class-transformer';
 import { IsNotEmpty, IsString } from 'class-validator';
+import { IAccountGetShort } from 'src/interfaces/accounts.interface';
 import { BaseEntity } from '../../app/entities/base.entity';
 import { JournalLine } from '../../transactions/entities/journal_line.entity';
 
 @Entity()
-export class Account extends BaseEntity {
+export class Account extends BaseEntity implements IAccountGetShort {
   @OneToMany({
     entity: () => JournalLine,
     mappedBy: (line: JournalLine) => line.account,
-    hidden: true,
+    orphanRemoval: true,
   })
   lines = new Collection<JournalLine>(this);
 

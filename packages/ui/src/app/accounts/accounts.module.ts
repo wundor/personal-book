@@ -9,7 +9,7 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
-import { AccountsAddNewComponent } from './add-new/add-new.component';
+import { AccountsAddUpdateComponent } from './add-update/add-update.component';
 import { NzAutocompleteModule } from 'ng-zorro-antd/auto-complete';
 import { IconsProviderModule } from '../icons-provider.module';
 import { NzInputModule } from 'ng-zorro-antd/input';
@@ -34,7 +34,7 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
     NzPopoverModule,
     NzSelectModule,
   ],
-  declarations: [AccountsListComponent, AccountsAddNewComponent],
+  declarations: [AccountsListComponent, AccountsAddUpdateComponent],
   exports: [],
 })
 export class AccountsModule {}

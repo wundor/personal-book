@@ -5,7 +5,7 @@
     "start:ui": "cd packages/ui && pnpm run start -- --host 0.0.0.0",
     "start:api": "cd packages/api && pnpm run start:dev",
     "test:ui": "cd packages/ui && pnpm run test",
-    "test:api": "cd packages/ui && pnpm run test",
+    "test:api": "cd packages/api && pnpm run test",
     "orm": "cd packages/api && npm run mikroorm"
   }
 }

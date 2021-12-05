@@ -1,9 +1,12 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { IsNotEmpty, IsString } from 'class-validator';
-import { CreateAccountDto } from './create-account.dto';
+import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import { IAccountUpdate } from 'src/interfaces/accounts.interface';
 
-export class UpdateAccountDto extends PartialType(CreateAccountDto) {
+export class UpdateAccountDto implements IAccountUpdate {
+  @IsNumber()
+  @IsNotEmpty()
+  id!: number;
+
   @IsNotEmpty()
   @IsString()
-  name: string;
+  fullName!: string;
 }

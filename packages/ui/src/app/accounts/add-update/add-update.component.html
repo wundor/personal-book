@@ -3,29 +3,27 @@
   nzTitle="Add new account"
   (nzOnCancel)="handleCancel()"
 >
-  <form
-    nz-form
-    [nzLayout]="'inline'"
-    [formGroup]="validateForm"
-    (ngSubmit)="submitForm()"
-  >
+  <form nz-form [nzLayout]="'inline'" [formGroup]="accountForm">
     <div *nzModalContent>
       <nz-form-item>
         <nz-form-control nzErrorTip="Should not be empty">
           <nz-input-group nzPrefixIcon="user">
-            <nz-autocomplete
-              [nzDataSource]="filteredOptions"
-              #auto
-            ></nz-autocomplete>
+            <nz-autocomplete #auto>
+              <nz-auto-option
+                *ngFor="let option of filteredOptions"
+                [nzValue]="option.fullName"
+                [nzLabel]="option.fullName"
+              >
+                {{ option.fullName }}
+              </nz-auto-option>
+            </nz-autocomplete>
             <!-- TODO: autofocus this input -->
             <input
-              #accountNameInput
               autofocus
               (keyup.control.enter)="submitForm()"
               formControlName="fullName"
               nz-input
               placeholder="Account name"
-              [(ngModel)]="inputValue"
               (ngModelChange)="onChange($event)"
               (click)="onChange('')"
               [nzAutocomplete]="auto"
@@ -46,11 +44,11 @@
             nz-popover
             nzPopoverTitle="God mode"
             nzPopoverContent="Ctrl+Enter to save"
-            [disabled]="!validateForm.valid"
+            [disabled]="!accountForm.valid"
             [nzLoading]="isOkLoading"
             (click)="submitForm()"
           >
-            Add
+            {{ inEditMode ? 'Update' : 'Add' }}
           </button>
         </nz-form-control>
       </div>

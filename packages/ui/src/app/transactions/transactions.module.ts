@@ -4,7 +4,7 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzDividerModule } from 'ng-zorro-antd/divider';
 import { CommonModule } from '@angular/common';
 import { TransactionsListComponent } from './list/list.component';
-import { TransactionsAddNewComponent } from './add-new/add-new.component';
+import { TransactionsAddUpdateComponent } from './add-update/add-update.component';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzFormModule } from 'ng-zorro-antd/form';
@@ -17,6 +17,8 @@ import { IconsProviderModule } from '../icons-provider.module';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
 import { NzTypographyModule } from 'ng-zorro-antd/typography';
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 
 @NgModule({
   imports: [
@@ -37,8 +39,10 @@ import { NzTypographyModule } from 'ng-zorro-antd/typography';
     NzSpaceModule,
     NzPopoverModule,
     NzTypographyModule,
+    NzInputModule,
+    NzToolTipModule,
   ],
-  declarations: [TransactionsListComponent, TransactionsAddNewComponent],
+  declarations: [TransactionsListComponent, TransactionsAddUpdateComponent],
   exports: [],
 })
 export class TransactionsModule {}

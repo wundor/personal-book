@@ -1,11 +1,10 @@
-<button nz-button nzType="primary" (click)="addNew.showModal()">
+<button nz-button nzType="primary" (click)="addUpdate.showModal()">
   Add new account
 </button>
-<app-accounts-add-new
-  #addNew
+<app-accounts-add-update
+  #addUpdate
   (added)="showAccounts()"
-  [accountList]="accountsList"
-></app-accounts-add-new>
+></app-accounts-add-update>
 
 <nz-table
   #accountsTable
@@ -23,7 +22,7 @@
     <tr *ngFor="let data of accountsTable.data">
       <td>{{ data.fullName }}</td>
       <td>
-        <a disabled>Edit</a>
+        <a (click)="addUpdate.showModal(data)">Edit</a>
       </td>
     </tr>
   </tbody>

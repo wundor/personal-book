@@ -43,10 +43,32 @@ export class AccountsService {
   }
 
   async findOne(id: number): Promise<Account> {
+    return this.findAndComputeBalance({ id: id });
+  }
+  async findByName(name: string): Promise<Account> {
+    return this.findAndComputeBalance({ fullName: name });
+  }
+
+  async update(
+    id: number,
+    updateAccountDto: UpdateAccountDto,
+  ): Promise<Account> {
+    const account = await this.findOne(id);
+    account.fullName = updateAccountDto.fullName;
+    account.name = updateAccountDto.fullName;
+    this.repo.flush();
+    return this.findOne(id);
+  }
+
+  async findAndComputeBalance(
+    search: Record<string, unknown>,
+  ): Promise<Account> {
     try {
       let balance = 0;
-      const account = await this.repo.findOneOrFail({ id: id });
-      await account.lines.init();
+      const account = await this.repo.findOneOrFail(search, [
+        'lines',
+        'lines.transaction',
+      ]);
       for (const line of account.lines) {
         balance += Number(line.amount);
       }
@@ -56,43 +78,4 @@ export class AccountsService {
       throw new NotFoundException('Account not found');
     }
   }
-
-  // async findLatestBalance(id: string): Promise<number> {
-  //   try {
-  //     const account = await this.repo.findOneOrFail(id);
-  //     return account;
-  //   } catch (err) {
-  //     throw new NotFoundException('Account not found');
-  //   }
-  // }
-
-  async findByName(name: string): Promise<Account> {
-    try {
-      const account = await this.repo.findOneOrFail({
-        fullName: name,
-      });
-      return account;
-    } catch (err) {
-      throw new NotFoundException(`Account '${name}' was not found`);
-    }
-  }
-
-  async update(
-    id: number,
-    updateAccountDto: UpdateAccountDto,
-  ): Promise<Account> {
-    const account = this.findOne(id);
-    (await account).name = updateAccountDto.name;
-    this.repo.flush();
-    return this.findOne(id);
-  }
-
-  // async remove(id: string): Promise<{ deleted: boolean; message?: string }> {
-  //   try {
-  //     await this.repo.delete(id);
-  //     return { deleted: true };
-  //   } catch (err) {
-  //     return { deleted: false, message: err.message };
-  //   }
-  // }
 }

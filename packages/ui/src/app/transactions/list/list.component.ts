@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TransactionsService } from '../transactions.service';
-import { ITransaction } from '@pb/api/src/interfaces/transactions.interface';
+import { ITransactionUpdate } from '@pb/api/src/interfaces/transactions.interface';
 import { NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { Title } from '@angular/platform-browser';
 import { PeriodService } from 'src/app/shared/period.service';
@@ -8,7 +8,7 @@ import { PeriodService } from 'src/app/shared/period.service';
 interface ColumnItem {
   name: string;
   sortOrder: NzTableSortOrder | null;
-  sortFn: NzTableSortFn<ITransaction> | null;
+  sortFn: NzTableSortFn<ITransactionUpdate> | null;
   sortDirections: NzTableSortOrder[];
 }
 
@@ -39,13 +39,13 @@ export class TransactionsListComponent implements OnInit {
     }
   }
 
-  transactions: ITransaction[] = [];
+  transactions: ITransactionUpdate[] = [];
 
   listOfColumns: ColumnItem[] = [
     {
       name: 'Date',
       sortOrder: 'descend',
-      sortFn: (a: ITransaction, b: ITransaction) => {
+      sortFn: (a: ITransactionUpdate, b: ITransactionUpdate) => {
         return new Date(a.date).getTime() - new Date(b.date).getTime();
       },
       sortDirections: ['ascend', 'descend'],
@@ -53,9 +53,11 @@ export class TransactionsListComponent implements OnInit {
   ];
 
   showTransactions() {
-    this.listService.getTransactions().subscribe((data: ITransaction[]) => {
-      this.transactions = data;
-    });
+    this.listService
+      .getTransactions()
+      .subscribe((data: ITransactionUpdate[]) => {
+        this.transactions = data;
+      });
   }
 
   constructor(

@@ -1,10 +1,10 @@
-<button nz-button nzType="primary" (click)="addNew.showModal()">
+<button nz-button nzType="primary" (click)="addUpdate.showModal()">
   Create new transaction
 </button>
-<app-transactions-add-new
-  #addNew
+<app-transactions-add-update
+  #addUpdate
   (added)="showTransactions()"
-></app-transactions-add-new>
+></app-transactions-add-update>
 
 <nz-table
   #transactionsTable
@@ -45,7 +45,7 @@
         ></td>
         <td>{{ data.info }}</td>
         <td>
-          <a (click)="addNew.showModal(data)">Edit</a>
+          <a (click)="addUpdate.showModal(data)">Edit</a>
         </td>
       </tr>
       <tr [nzExpand]="expandSet.has(data.id)">

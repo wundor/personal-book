@@ -1,15 +1,15 @@
 <nz-modal
   [(nzVisible)]="isVisible"
   nzTitle="Create transaction"
+  nzWidth="640px"
   (nzOnCancel)="handleCancel()"
 >
-  <form nz-form [formGroup]="linesForm" (ngSubmit)="submitForm()">
+  <form nz-form [formGroup]="transactionForm">
     <div *nzModalContent>
       <div nz-row>
         <div nz-col>
           <nz-form-item>
             <nz-form-control nzErrorTip="Should not be empty">
-              <!-- [(ngModel)]="date" -->
               <nz-date-picker
                 type="date"
                 formControlName="date"
@@ -34,43 +34,63 @@
         formArrayName="lines"
         *ngFor="let item of lines['controls']; let i = index"
       >
-        <div nz-col [formGroupName]="i">
-          <nz-form-item>
-            <nz-form-control nzErrorTip="Enter name">
-              <nz-autocomplete
-                [nzDataSource]="filteredOptions"
-                #auto
-              ></nz-autocomplete>
-              <input
-                formControlName="accountName"
-                class="accountName"
-                nz-input
-                placeholder="account"
-                [nzAutocomplete]="auto"
-                (click)="onChange('')"
-                (ngModelChange)="onChange($event)"
-              />
-            </nz-form-control>
-          </nz-form-item>
+        <div nz-col [formGroupName]="i" nzFlex="auto">
+          <div formGroupName="account">
+            <nz-form-item>
+              <nz-form-control nzErrorTip="Enter name">
+                <nz-autocomplete #auto>
+                  <nz-auto-option
+                    *ngFor="let option of filteredOptions"
+                    [nzValue]="option.fullName"
+                    [nzLabel]="option.fullName"
+                  >
+                    {{ option.fullName }}
+                  </nz-auto-option>
+                </nz-autocomplete>
+                <nz-input-group>
+                  <input
+                    nz-input
+                    formControlName="fullName"
+                    placeholder="account"
+                    [nzAutocomplete]="auto"
+                    (click)="onChange('', i)"
+                    (ngModelChange)="onChange($event, i)"
+                  />
+                </nz-input-group>
+                <!-- // TODO: proposed solution for when we need to create new accounts from 'add transaction' window
+              <ng-template #suffixTemplateInfo>
+                <i
+                  *ngIf="!this.accountsList.includes(this.enteredAccounts[i])"
+                  nz-icon
+                  nz-tooltip
+                  nzTooltipTitle="Account will be created"
+                  nzType="info-circle"
+                ></i>
+              </ng-template> -->
+              </nz-form-control>
+            </nz-form-item>
+          </div>
         </div>
-        <div nz-col [formGroupName]="i">
+        <div nz-col [formGroupName]="i" nzFlex="100px">
           <nz-form-item>
             <input
+              nz-input
               (keyup.control.enter)="submitForm()"
               formControlName="amount"
               type="number"
               class="amount"
-              nz-input
               placeholder="amount"
             />
-            <i
-              nz-icon
-              nzType="minus-circle"
-              nzTheme="outline"
-              class="dynamic-delete-button"
-              (click)="removeField(i, $event)"
-            ></i>
           </nz-form-item>
+        </div>
+        <div nz-col [formGroupName]="i" nzFlex="25px">
+          <i
+            nz-icon
+            nzType="minus-circle"
+            nzTheme="outline"
+            class="dynamic-delete-button"
+            (click)="removeField(i, $event)"
+          ></i>
         </div>
       </div>
 
@@ -100,11 +120,11 @@
           <button
             nz-button
             nzType="primary"
-            [disabled]="!linesForm.valid"
+            [disabled]="!transactionForm.valid"
             [nzLoading]="isOkLoading"
             (click)="submitForm()"
           >
-            Add
+            {{ inEditMode ? 'Update' : 'Add' }}
           </button>
         </nz-form-control>
       </div>

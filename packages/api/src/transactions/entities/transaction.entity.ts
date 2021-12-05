@@ -9,6 +9,7 @@ export class Transaction extends BaseEntity {
   @OneToMany({
     entity: () => JournalLine,
     mappedBy: (line: JournalLine) => line.transaction,
+    orphanRemoval: true,
   })
   @Type(() => JournalLine)
   lines = new Collection<JournalLine>(this);

@@ -1,17 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ITransaction } from '@pb/api/src/interfaces/transactions.interface';
+import {
+  ITransactionCreate,
+  ITransactionUpdate,
+} from '@pb/api/src/interfaces/transactions.interface';
 
 @Injectable()
 export class TransactionsService {
   constructor(private http: HttpClient) {}
 
-  getTransactions(): Observable<ITransaction[]> {
-    return this.http.get<ITransaction[]>(`transactions`);
+  getTransactions(): Observable<ITransactionUpdate[]> {
+    return this.http.get<ITransactionUpdate[]>(`transactions`);
   }
 
-  addTransaction(transaction: ITransaction): Observable<ITransaction> {
-    return this.http.post<ITransaction>(`transactions`, transaction);
+  addTransaction(
+    transaction: ITransactionCreate,
+  ): Observable<ITransactionCreate> {
+    return this.http.post<ITransactionCreate>(`transactions`, transaction);
+  }
+
+  updateTransaction(
+    transaction: ITransactionUpdate,
+  ): Observable<ITransactionUpdate> {
+    return this.http.patch<ITransactionUpdate>(
+      `transactions/${transaction.id}`,
+      transaction,
+    );
   }
 }

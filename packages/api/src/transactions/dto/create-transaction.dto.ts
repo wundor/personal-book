@@ -5,27 +5,19 @@ import {
   IsDate,
   IsNotEmpty,
   IsNumber,
-  IsOptional,
-  IsString,
-  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { Account } from 'src/accounts/entities/account.entity';
-import { IAccount } from 'src/interfaces/accounts.interface';
+import { IAccountUpdate } from 'src/interfaces/accounts.interface';
 import {
-  IJournalLine,
-  ITransaction,
+  IJournalLineCreate,
+  ITransactionCreate,
 } from 'src/interfaces/transactions.interface';
 
-export class JournalLineDto implements IJournalLine {
+export class CreateJournalLineDto implements IJournalLineCreate {
   @IsNotEmpty()
-  @ValidateIf((o) => o.accountName == null)
   @Type(() => Account)
-  account: IAccount;
-
-  @IsOptional()
-  @IsString()
-  accountName: string;
+  account!: IAccountUpdate;
 
   @IsNotEmpty()
   @IsNumber({
@@ -34,7 +26,7 @@ export class JournalLineDto implements IJournalLine {
   amount!: number;
 }
 
-export class CreateTransactionDto implements ITransaction {
+export class CreateTransactionDto implements ITransactionCreate {
   @IsNotEmpty()
   @IsDate()
   @Type(() => Date)
@@ -44,10 +36,7 @@ export class CreateTransactionDto implements ITransaction {
 
   @IsArray()
   @ArrayMinSize(2)
-  @Type(() => JournalLineDto)
+  @Type(() => CreateJournalLineDto)
   @ValidateNested({ each: true })
-  lines!: JournalLineDto[];
-
-  // only to implement interface
-  id: number;
+  lines!: CreateJournalLineDto[];
 }

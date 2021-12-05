@@ -7,10 +7,11 @@ import {
   Logger,
   NotFoundException,
 } from '@nestjs/common';
-import { AccountsService } from 'src/accounts/accounts.service';
-import { PERIOD_MONTH, PERIOD_ALL } from 'src/interfaces/requests.interface';
+import { AccountsService } from '../accounts/accounts.service';
+import { PERIOD_MONTH, PERIOD_ALL } from '../interfaces/requests.interface';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { SearchTransactionDto } from './dto/search-transaction.dto';
+import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { JournalLine } from './entities/journal_line.entity';
 import { Transaction } from './entities/transaction.entity';
 
@@ -30,31 +31,27 @@ export class TransactionsService {
         new Date(transaction.date),
         transaction.info,
       );
-      let transactionBalance = 0;
       // forEach() will swallow exception
       for (let i = 0; i < transaction.lines.length; i++) {
-        transactionBalance += transaction.lines[i].amount;
         const account = await this.account.findByName(
-          transaction.lines[i].accountName,
+          transaction.lines[i].account.fullName,
         );
         const initLine = new JournalLine(account, transaction.lines[i].amount);
         this.lineRepo.persist(initLine);
         initTransaction.lines.add(initLine);
       }
-      Logger.debug(`Lines: ${JSON.stringify(transaction.lines)}`);
-      if (transactionBalance !== 0) {
-        const message = `Transaction '${transaction.info}' is not balanced! ${transactionBalance} != 0`;
-        Logger.error(message);
-        throw new BadRequestException(message);
+      if (await this.isTransactionBalanced(initTransaction)) {
+        this.repo.persist(initTransaction);
+        await this.repo.flush();
+        await this.lineRepo.flush();
+        return initTransaction;
+      } else {
+        throw new BadRequestException('Transaction is not balanced!');
       }
-      this.repo.persist(initTransaction);
-      await this.repo.flush();
-      await this.lineRepo.flush();
-      return initTransaction;
     } catch (e) {
       Logger.log(e);
       throw new InternalServerErrorException(
-        'Unable to create transaction. Please check application logs',
+        `Unable to create transaction: ${e.message} `,
       );
     }
   }
@@ -80,24 +77,62 @@ export class TransactionsService {
 
   async findOne(id: number): Promise<Transaction> {
     try {
-      const transaction = await this.repo.findOneOrFail(id, ['lines']);
+      const transaction = await this.repo.findOneOrFail(id, [
+        'lines',
+        'lines.account',
+      ]);
       return transaction;
     } catch (err) {
       throw new NotFoundException('Transaction not found');
     }
   }
 
-  // // async update(id: string, transaction: UpdateTransactionDto): Promise<Transactions> {
-  // //   await this.transactions.update(id, transaction);
-  // //   return this.findOne(id);
-  // // }
+  async update(id: number, newT: UpdateTransactionDto): Promise<Transaction> {
+    try {
+      const existingT = await this.findOne(id);
+      existingT.info = newT.info;
+      existingT.date = new Date(newT.date);
+      for (let i = 0; i < existingT.lines.length; i++) {
+        const account = await this.account.findByName(
+          existingT.lines[i].account.fullName,
+        );
+        account.lines.remove(existingT.lines[i]);
+      }
+      existingT.lines.removeAll();
+      for (let i = 0; i < newT.lines.length; i++) {
+        const account = await this.account.findByName(
+          newT.lines[i].account.fullName,
+        );
+        const initLine = new JournalLine(account, newT.lines[i].amount);
+        this.lineRepo.persist(initLine);
+        existingT.lines.add(initLine);
+      }
+      if (await this.isTransactionBalanced(existingT)) {
+        await this.repo.flush();
+        await this.lineRepo.flush();
+        return this.findOne(id);
+      } else {
+        throw new BadRequestException('Transaction is not balanced!');
+      }
+    } catch (e) {
+      Logger.log(e);
+      throw new InternalServerErrorException(
+        `Unable to update transaction: ${e.message}`,
+      );
+    }
+  }
 
-  // async remove(id: string): Promise<{ deleted: boolean; message?: string }> {
-  //   try {
-  //     await this.transactions.delete(id);
-  //     return { deleted: true };
-  //   } catch (err) {
-  //     return { deleted: false, message: err.message };
-  //   }
-  // }
+  async isTransactionBalanced(t: Transaction): Promise<boolean> {
+    let transactionBalance = 0;
+    for (let i = 0; i < t.lines.length; i++) {
+      transactionBalance += t.lines[i].amount;
+    }
+    Logger.debug(`Lines: ${JSON.stringify(t.lines)}`);
+    if (transactionBalance !== 0) {
+      const message = `Transaction '${t.info}' is not balanced! ${transactionBalance} != 0`;
+      Logger.error(message);
+      return false;
+    }
+    return true;
+  }
 }

@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import { IAccount } from 'src/interfaces/accounts.interface';
+import { IAccountCreate } from 'src/interfaces/accounts.interface';
 
-export class CreateAccountDto implements IAccount {
+export class CreateAccountDto implements IAccountCreate {
   @IsNotEmpty()
   @IsString()
   fullName!: string;
