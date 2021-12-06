@@ -1,0 +1,33 @@
+<nz-row [nzGutter]="16">
+  <nz-col [nzSpan]="12">
+    <nz-statistic
+      class="account-stats"
+      [nzValue]="account.fullName"
+      [nzTitle]="'Name'"
+    ></nz-statistic>
+  </nz-col>
+  <nz-col [nzSpan]="12">
+    <nz-statistic
+      class="account-stats"
+      [nzValue]="account.balance"
+      [nzTitle]="'Balance'"
+    ></nz-statistic>
+  </nz-col>
+</nz-row>
+<nz-divider nzText="Transactions"></nz-divider>
+<nz-table #basicTable [nzData]="account.lines">
+  <thead>
+    <tr>
+      <th nzWidth="50px">Date</th>
+      <th nzWidth="100px">Amount</th>
+      <th>Info</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of basicTable.data">
+      <td>{{ data.transaction.date.toString().substring(0, 10) }}</td>
+      <td>{{ data.amount }}</td>
+      <td>{{ data.transaction.info }}</td>
+    </tr>
+  </tbody>
+</nz-table>

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   IAccountCreate,
+  IAccountGetLong,
   IAccountGetShort,
   IAccountUpdate,
 } from '@pb/api/src/interfaces/accounts.interface';
@@ -13,6 +14,10 @@ export class AccountsService {
 
   getAccounts(): Observable<IAccountGetShort[]> {
     return this.http.get<IAccountGetShort[]>(`accounts`);
+  }
+
+  getAccountsDetails(id: number): Observable<IAccountGetLong> {
+    return this.http.get<IAccountGetLong>(`accounts/${id}`);
   }
 
   addAccount(account: IAccountCreate): Observable<IAccountCreate> {

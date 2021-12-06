@@ -15,6 +15,10 @@ import { IconsProviderModule } from '../icons-provider.module';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzPopoverModule } from 'ng-zorro-antd/popover';
+import { AccountsDetailsComponent } from './details/details.component';
+import { NzStatisticModule } from 'ng-zorro-antd/statistic';
+import { NzTimelineModule } from 'ng-zorro-antd/timeline';
+import { NzTypographyModule } from 'ng-zorro-antd/typography';
 
 @NgModule({
   imports: [
@@ -33,8 +37,15 @@ import { NzPopoverModule } from 'ng-zorro-antd/popover';
     NzInputModule,
     NzPopoverModule,
     NzSelectModule,
+    NzStatisticModule,
+    NzTimelineModule,
+    NzTypographyModule,
   ],
-  declarations: [AccountsListComponent, AccountsAddUpdateComponent],
+  declarations: [
+    AccountsListComponent,
+    AccountsAddUpdateComponent,
+    AccountsDetailsComponent,
+  ],
   exports: [],
 })
 export class AccountsModule {}

@@ -20,7 +20,11 @@
   </thead>
   <tbody>
     <tr *ngFor="let data of accountsTable.data">
-      <td>{{ data.fullName }}</td>
+      <td>
+        <a routerLink="{{ data.id }}">
+          {{ data.fullName }}
+        </a>
+      </td>
       <td>
         <a (click)="addUpdate.showModal(data)">Edit</a>
       </td>
