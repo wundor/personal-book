@@ -66,7 +66,6 @@ export class TransactionsAddUpdateComponent implements OnInit {
   submitForm(): void {
     this.isOkLoading = true;
     if (this.inEditMode) {
-      console.log(this.transactionForm.value);
       this.transactions
         .updateTransaction(this.transactionForm.value)
         .pipe(catchError(this.shared.handleError))

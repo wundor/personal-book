@@ -7,6 +7,43 @@
 ></app-accounts-add-update>
 
 <nz-table
+  #accountTreeTable
+  [nzData]="accountTree"
+  nzSize="small"
+  [nzFrontPagination]="false"
+>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let data of accountTreeTable.data">
+      <ng-container *ngFor="let item of mapOfExpandedData[data.id]">
+        <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+          <td
+            [nzIndentSize]="item.level! * 10"
+            [nzShowExpand]="!!item.children"
+            [(nzExpand)]="item.expand"
+            (nzExpandChange)="
+              collapse(mapOfExpandedData[data.id], item, $event)
+            "
+          >
+            <a routerLink="{{ item.id }}">
+              {{ item.name }}
+            </a>
+          </td>
+          <td>
+            <a (click)="addUpdate.showModal(item)">Edit</a>
+          </td>
+        </tr>
+      </ng-container>
+    </ng-container>
+  </tbody>
+</nz-table>
+
+<nz-table
   #accountsTable
   [nzData]="accounts"
   nzSize="small"

@@ -5,6 +5,12 @@ import { catchError } from 'rxjs/operators';
 import { ApiService } from 'src/app/shared/api.service';
 import { Title } from '@angular/platform-browser';
 
+export type TreeNodeInterface = IAccountGetShort & {
+  level?: number;
+  parent?: TreeNodeInterface;
+  expand?: boolean;
+};
+
 @Component({
   selector: 'app-accounts-list',
   templateUrl: './list.component.html',
@@ -13,6 +19,7 @@ import { Title } from '@angular/platform-browser';
 })
 export class AccountsListComponent implements OnInit {
   accounts: IAccountGetShort[] = [];
+  accountTree: TreeNodeInterface[] = [];
 
   showAccounts() {
     this.accountsService
@@ -23,6 +30,73 @@ export class AccountsListComponent implements OnInit {
       });
   }
 
+  showAccountTree() {
+    this.accountsService
+      .getAccountTree()
+      .pipe(catchError(this.shared.handleError))
+      .subscribe((data: IAccountGetShort[]) => {
+        this.accountTree = data;
+        this.accountTree.forEach((item) => {
+          this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
+        });
+      });
+  }
+
+  mapOfExpandedData: { [id: string]: TreeNodeInterface[] } = {};
+
+  collapse(
+    array: TreeNodeInterface[],
+    data: TreeNodeInterface,
+    $event: boolean,
+  ): void {
+    if (!$event) {
+      if (data.children) {
+        data.children.forEach((d: IAccountGetShort) => {
+          const target = array.find((a) => a.id === d.id)!;
+          target.expand = false;
+          this.collapse(array, target, false);
+        });
+      } else {
+        return;
+      }
+    }
+  }
+
+  convertTreeToList(root: TreeNodeInterface): TreeNodeInterface[] {
+    const stack: TreeNodeInterface[] = [];
+    const array: TreeNodeInterface[] = [];
+    const hashMap = {};
+    stack.push({ ...root, level: 0, expand: false });
+
+    while (stack.length !== 0) {
+      const node = stack.pop()!;
+      this.visitNode(node, hashMap, array);
+      if (node.children) {
+        for (let i = node.children.length - 1; i >= 0; i--) {
+          stack.push({
+            ...node.children[i],
+            level: node.level! + 1,
+            expand: false,
+            parent: node,
+          });
+        }
+      }
+    }
+
+    return array;
+  }
+
+  visitNode(
+    node: TreeNodeInterface,
+    hashMap: { [id: string]: boolean },
+    array: TreeNodeInterface[],
+  ): void {
+    if (!hashMap[node.id]) {
+      hashMap[node.id] = true;
+      array.push(node);
+    }
+  }
+
   constructor(
     private accountsService: AccountsService,
     private shared: ApiService,
@@ -31,6 +105,7 @@ export class AccountsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.showAccounts();
+    this.showAccountTree();
     this.title.setTitle('Accounts');
   }
 }

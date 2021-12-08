@@ -3,17 +3,18 @@ import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
 
-import { MikroORM } from '@mikro-orm/core';
+import { MikroORM, TableExistsException } from '@mikro-orm/core';
 import { Account } from './accounts/entities/account.entity';
 import { Transaction } from './transactions/entities/transaction.entity';
 import { JournalLine } from './transactions/entities/journal_line.entity';
+import { exit } from 'process';
 
 async function bootstrap() {
   const orm = await MikroORM.init({
     entities: [Account, Transaction, JournalLine],
-    type: 'mysql',
+    type: 'postgresql',
     host: 'localhost',
-    port: 3307,
+    port: 5433,
     user: 'personal_book',
     password: '3BYu5gQBybJ3PSh',
     dbName: 'personal_book',
@@ -28,13 +29,21 @@ async function bootstrap() {
     debug: true,
   });
 
-  // TODO: wrap it in 'develop' flag or something, this needs to not execute on production!
-  // const generator = orm.getSchemaGenerator();
-  // await generator.dropDatabase('personal_book');
-  // await generator.createDatabase('personal_book');
-  // await generator.dropSchema();
-  // await generator.createSchema();
-
+  try {
+    // TODO: wrap it in 'develop' flag or something, this needs to not execute on production!
+    const generator = orm.getSchemaGenerator();
+    // await generator.dropDatabase('personal_book');
+    // await generator.createDatabase('personal_book');
+    // await generator.dropSchema();
+    await generator.createSchema();
+  } catch (e) {
+    if (e instanceof TableExistsException) {
+      Logger.log(`Entities schema initialized, moving on`);
+    } else {
+      Logger.error(e);
+      exit(1);
+    }
+  }
   const migrator = orm.getMigrator();
   await migrator.up();
   await orm.close(true);

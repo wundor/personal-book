@@ -6,7 +6,9 @@ import {
   Patch,
   Param,
   ParseIntPipe,
+  Query,
 } from '@nestjs/common';
+import { TYPES } from 'src/interfaces/accounts.interface';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
@@ -23,6 +25,12 @@ export class AccountsController {
   @Get()
   findAll() {
     return this.accountsService.findAll();
+  }
+
+  @Get('tree')
+  // generateAccountTree(@Query() type: TYPES) {
+  generateAccountTree() {
+    return this.accountsService.generateTree();
   }
 
   @Get(':id')

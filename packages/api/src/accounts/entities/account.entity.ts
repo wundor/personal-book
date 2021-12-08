@@ -34,9 +34,15 @@ export class Account extends BaseEntity implements IAccountGetShort {
   @Property({ persist: false })
   balance?: number;
 
-  constructor(name: string) {
+  @Property({ persist: false })
+  children: Account[];
+
+  constructor(fullName: string) {
     super();
-    this.name = name;
-    this.fullName = name;
+    if (fullName) {
+      this.fullName = fullName;
+      console.log(fullName);
+      this.name = fullName.split(':')[fullName.split(':').length - 1];
+    }
   }
 }

@@ -1,9 +1,9 @@
 import { Options } from '@mikro-orm/core';
 
 const config: Options = {
-  type: 'mysql',
+  type: 'postgresql',
   host: 'localhost',
-  port: 3307,
+  port: 5433,
   user: 'personal_book',
   password: '3BYu5gQBybJ3PSh',
   dbName: 'personal_book',
