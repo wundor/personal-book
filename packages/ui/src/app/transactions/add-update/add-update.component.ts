@@ -128,6 +128,7 @@ export class TransactionsAddUpdateComponent implements OnInit {
     });
   }
 
+  // TODO: maybe I should get this transaction from db by it's id and populate the form with those values
   generateEditForm(transaction: ITransactionUpdate): void {
     this.transactionForm.reset();
     this.lines.clear();

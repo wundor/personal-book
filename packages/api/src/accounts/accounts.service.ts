@@ -7,6 +7,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { TYPES } from 'src/interfaces/accounts.interface';
@@ -23,17 +24,19 @@ export class AccountsService {
 
   async create(account: CreateAccountDto): Promise<Account> {
     try {
+      // TODO: check if parent account is here
       await this.repo.persistAndFlush(new Account(account.fullName));
       const newAccount = await this.findByName(account.fullName);
       return newAccount;
-    } catch (e) {
-      if (e instanceof UniqueConstraintViolationException) {
+    } catch (err) {
+      Logger.error(err);
+      if (err instanceof UniqueConstraintViolationException) {
         throw new BadRequestException(
           `Account with name ${account.fullName} already exists`,
         );
       } else {
         throw new InternalServerErrorException(
-          `Something went wrong during account creation: ${e.message}. Check application log for more info`,
+          `Something went wrong during account creation: ${err.message}. Check application log for more info`,
         );
       }
     }
@@ -46,12 +49,14 @@ export class AccountsService {
   async findOne(id: number): Promise<Account> {
     return this.findAndComputeBalance({ id: id });
   }
+
   async findByName(name: string): Promise<Account> {
     return this.findAndComputeBalance({ fullName: name });
   }
 
-  async generateTree(type?: TYPES): Promise<Account[]> {
-    const rawList = await this.repo.find(
+  async generateAccountTree(): Promise<Account[]> {
+    const accountMap = Object.create(null);
+    const list = await this.repo.find(
       {
         $or: [
           { fullName: { $like: `${TYPES.ASSETS}%` } },
@@ -60,45 +65,29 @@ export class AccountsService {
           { fullName: { $like: `${TYPES.LIABILITIES}%` } },
         ],
       },
-      {
-        orderBy: { full_name: 'asc' },
-      },
+      ['lines', 'lines.transaction'], // populate collections
+      { full_name: 'asc' }, // order by
     );
-    const tree = this.listToTree(rawList);
-    return tree;
-  }
 
-  listToTree(list: Account[]) {
-    const result = [];
-
-    list.forEach(function (acc) {
-      const path = acc.fullName.split(':');
-      buildFromSegments(result, path, acc);
+    list.forEach((item) => {
+      item.computeBalance();
+      accountMap[item.fullName] = item;
     });
 
-    return result;
+    const accountTree = [];
 
-    function buildFromSegments(scope: Account[], path: string[], acc: Account) {
-      const current = path.shift();
-
-      const found = findInScope(scope, current);
-
-      if (!found) {
-        scope.push(acc);
+    list.forEach((item) => {
+      const namePath = item.fullName.split(':');
+      namePath.pop();
+      if (namePath.length) {
+        const parentName = namePath.join(':');
+        accountMap[parentName].children = accountMap[parentName].children || [];
+        accountMap[parentName].children.push(accountMap[item.fullName]);
+      } else {
+        accountTree.push(accountMap[item.fullName]);
       }
-
-      if (path.length) {
-        found.children = found.children || [];
-        buildFromSegments(found.children, path, acc);
-      }
-    }
-    function findInScope(scope: Account[], find: string): Account {
-      for (let i = 0; i < scope.length; i++) {
-        if (scope[i].name === find) {
-          return scope[i];
-        }
-      }
-    }
+    });
+    return accountTree;
   }
 
   async update(
@@ -120,18 +109,10 @@ export class AccountsService {
         'lines',
         'lines.transaction',
       ]);
-      return this.computeBalance(account);
+      return account.computeBalance();
     } catch (err) {
+      Logger.error(err);
       throw new NotFoundException('Account not found');
     }
-  }
-
-  computeBalance(account: Account): Account {
-    let balance = 0;
-    for (const line of account.lines) {
-      balance += Number(line.amount);
-    }
-    account.balance = balance;
-    return account;
   }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
+// deprecated, will sit there just in case I'll need inspiration
 @Injectable({ providedIn: 'root' })
 export class PeriodService {
   period: string = 'month';

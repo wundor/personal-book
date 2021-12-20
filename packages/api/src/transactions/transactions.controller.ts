@@ -5,12 +5,10 @@ import {
   Body,
   Param,
   ParseIntPipe,
-  Query,
   Patch,
 } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { SearchTransactionDto } from './dto/search-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
 @Controller('transactions')
@@ -23,8 +21,8 @@ export class TransactionsController {
   }
 
   @Get()
-  findAll(@Query() query: SearchTransactionDto) {
-    return this.service.findAll(query);
+  findAll() {
+    return this.service.findAll();
   }
 
   @Get(':id')
@@ -39,9 +37,4 @@ export class TransactionsController {
   ) {
     return this.service.update(id, transaction);
   }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.service.remove(id);
-  // }
 }

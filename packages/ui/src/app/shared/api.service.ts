@@ -35,10 +35,7 @@ export class ApiService {
 
 @Injectable()
 export class APIInterceptor implements HttpInterceptor {
-  constructor(
-    @Inject('BASE_API_URL') private baseUrl: string,
-    private period: PeriodService,
-  ) {}
+  constructor(@Inject('BASE_API_URL') private baseUrl: string) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -46,10 +43,6 @@ export class APIInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const apiReq = request.clone({
       url: `${this.baseUrl}/${request.url}`,
-      params: (request.params ? request.params : new HttpParams()).set(
-        'period',
-        this.period.period,
-      ),
     });
     return next.handle(apiReq);
   }

@@ -8,9 +8,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AccountsService } from '../accounts/accounts.service';
-import { PERIOD_MONTH, PERIOD_ALL } from '../interfaces/requests.interface';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { SearchTransactionDto } from './dto/search-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { JournalLine } from './entities/journal_line.entity';
 import { Transaction } from './entities/transaction.entity';
@@ -56,23 +54,8 @@ export class TransactionsService {
     }
   }
 
-  async findAll(query: SearchTransactionDto): Promise<Transaction[]> {
-    if (query.period === PERIOD_ALL) {
-      return await this.repo.findAll(['lines', 'lines.account']);
-    } else if (query.period === PERIOD_MONTH) {
-      const date = new Date();
-      const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-      const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-      return await this.repo.find(
-        {
-          date: {
-            $gte: firstDay,
-            $lte: lastDay,
-          },
-        },
-        ['lines', 'lines.account'],
-      );
-    }
+  async findAll(): Promise<Transaction[]> {
+    return await this.repo.findAll(['lines', 'lines.account']);
   }
 
   async findOne(id: number): Promise<Transaction> {

@@ -22,6 +22,7 @@ export interface IAccountGetLong {
   fullName: string;
   balance: number;
   lines: IJournalLineGetAccount[];
+  children?: IAccountGetLong[];
 }
 
 export enum TYPES {
@@ -31,14 +32,6 @@ export enum TYPES {
   EQUITY = 'EQUITY',
   LIABILITIES = 'LIABILITIES',
 }
-
-// export const TYPES = {
-//   ASSETS: 'ASSETS',
-//   EXPENSES: 'EXPENSES',
-//   INCOME: 'INCOME',
-//   EQUITY: 'EQUITY',
-//   LIABILITIES: 'LIABILITIES',
-// };
 
 export const enum ACCOUNTS {
   START = 'EQUITY:Starting-Balance',

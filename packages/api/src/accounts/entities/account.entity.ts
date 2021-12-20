@@ -41,8 +41,19 @@ export class Account extends BaseEntity implements IAccountGetShort {
     super();
     if (fullName) {
       this.fullName = fullName;
-      console.log(fullName);
       this.name = fullName.split(':')[fullName.split(':').length - 1];
     }
+  }
+
+  /**
+   * Computes the account balance from it's journal lines
+   */
+  computeBalance(): Account {
+    let balance = 0;
+    for (const line of this.lines) {
+      balance += Number(line.amount);
+    }
+    this.balance = balance;
+    return this;
   }
 }
