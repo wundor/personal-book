@@ -3,7 +3,7 @@
 </button>
 <app-accounts-add-update
   #addUpdate
-  (added)="showAccounts()"
+  (added)="showAccountTree()"
 ></app-accounts-add-update>
 
 <nz-table
@@ -32,11 +32,11 @@
             "
           >
             <a routerLink="{{ item.id }}">
-              {{ item.fullName }}
+              {{ item.name }}
             </a>
           </td>
           <td>
-            {{ item.name }}
+            {{ item.balance }}
           </td>
           <td>
             <a (click)="addUpdate.showModal(item)">Edit</a>

@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountsService } from '../accounts.service';
-import { IAccountGetShort } from '@pb/api/src/interfaces/accounts.interface';
+import {
+  IAccountGetLong,
+  IAccountGetShort,
+} from '@pb/api/src/interfaces/accounts.interface';
 import { catchError } from 'rxjs/operators';
 import { ApiService } from 'src/app/shared/api.service';
 import { Title } from '@angular/platform-browser';
 
-export type TreeNodeInterface = IAccountGetShort & {
+export type TreeNodeInterface = IAccountGetLong & {
   level?: number;
   parent?: TreeNodeInterface;
   expand?: boolean;
@@ -18,23 +21,14 @@ export type TreeNodeInterface = IAccountGetShort & {
   styleUrls: ['./list.component.less'],
 })
 export class AccountsListComponent implements OnInit {
-  accounts: IAccountGetShort[] = [];
+  accounts: IAccountGetLong[] = [];
   accountTree: TreeNodeInterface[] = [];
-
-  showAccounts() {
-    this.accountsService
-      .getAccounts()
-      .pipe(catchError(this.shared.handleError))
-      .subscribe((data: IAccountGetShort[]) => {
-        this.accounts = data;
-      });
-  }
 
   showAccountTree() {
     this.accountsService
       .getAccountTree()
       .pipe(catchError(this.shared.handleError))
-      .subscribe((data: IAccountGetShort[]) => {
+      .subscribe((data: IAccountGetLong[]) => {
         this.accountTree = data;
         this.accountTree.forEach((item) => {
           this.mapOfExpandedData[item.id] = this.convertTreeToList(item);
@@ -104,7 +98,6 @@ export class AccountsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.showAccounts();
     this.showAccountTree();
     this.title.setTitle('Accounts');
   }

@@ -16,8 +16,8 @@ export class AccountsService {
     return this.http.get<IAccountGetShort[]>(`accounts`);
   }
 
-  getAccountTree(): Observable<IAccountGetShort[]> {
-    return this.http.get<IAccountGetShort[]>(`accounts/tree`);
+  getAccountTree(): Observable<IAccountGetLong[]> {
+    return this.http.get<IAccountGetLong[]>(`accounts/tree`);
   }
 
   getAccountsDetails(id: number): Observable<IAccountGetLong> {
