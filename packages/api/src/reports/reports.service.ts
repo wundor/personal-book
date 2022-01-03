@@ -1,4 +1,4 @@
-import { EntityRepository } from '.pnpm/@mikro-orm+knex@4.5.9_220abf59d18ce1fff103fb2a30c3f30b/node_modules/@mikro-orm/knex';
+import { EntityRepository } from '@mikro-orm/postgresql';
 import { InjectRepository } from '@mikro-orm/nestjs';
 import { Injectable } from '@nestjs/common';
 import { AccountsService } from 'src/accounts/accounts.service';
