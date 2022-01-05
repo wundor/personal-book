@@ -6,6 +6,7 @@ import { AccountsModule } from '../accounts/accounts.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ReportsModule } from 'src/reports/reports.module';
+import { BudgetsModule } from 'src/budgets/budgets.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ReportsModule } from 'src/reports/reports.module';
     AccountsModule,
     TransactionsModule,
     ReportsModule,
+    BudgetsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

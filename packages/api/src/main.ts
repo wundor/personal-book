@@ -1,4 +1,4 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { AppModule } from './app/app.module';
@@ -8,6 +8,7 @@ import { Account } from './accounts/entities/account.entity';
 import { Transaction } from './transactions/entities/transaction.entity';
 import { JournalLine } from './transactions/entities/journal_line.entity';
 import { exit } from 'process';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const orm = await MikroORM.init({
@@ -49,10 +50,21 @@ async function bootstrap() {
   await orm.close(true);
 
   const app = await NestFactory.create(AppModule);
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   app.useGlobalPipes(new ValidationPipe({}));
   app.enableCors();
+  const config = new DocumentBuilder()
+    .setTitle('Personal Book')
+    .setDescription('personal-book API documentation')
+    .setVersion('1')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('docs', app, document);
   const port = process.env.PORT || 3333;
   await app.listen(port, '0.0.0.0', () => {
     Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
