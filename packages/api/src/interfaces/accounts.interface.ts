@@ -26,13 +26,13 @@ export interface IAccountGetLong {
 }
 
 export enum TYPES {
-  ASSETS = 'ASSETS',
   EXPENSES = 'EXPENSES',
+  META = 'META',
+  ASSETS = 'ASSETS',
   INCOME = 'INCOME',
-  EQUITY = 'EQUITY',
   LIABILITIES = 'LIABILITIES',
 }
 
 export const enum ACCOUNTS {
-  START = 'EQUITY:Starting-Balance',
+  START = 'META:Starting-Balance',
 }
