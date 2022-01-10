@@ -7,6 +7,7 @@ import {
   Param,
   ParseIntPipe,
 } from '@nestjs/common';
+import { TYPES } from 'src/interfaces/accounts.interface';
 import { AccountsService } from './accounts.service';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
@@ -27,7 +28,12 @@ export class AccountsController {
 
   @Get('tree')
   generateAccountTree() {
-    return this.accountsService.generateAccountTree();
+    return this.accountsService.generateAccountTree([
+      TYPES.EXPENSES,
+      TYPES.ASSETS,
+      TYPES.INCOME,
+      TYPES.LIABILITIES,
+    ]);
   }
 
   @Get(':id')

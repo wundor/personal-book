@@ -16,11 +16,11 @@ import { Transaction } from './entities/transaction.entity';
 @Injectable()
 export class TransactionsService {
   constructor(
+    private readonly account: AccountsService,
     @InjectRepository(Transaction)
     private readonly repo: EntityRepository<Transaction>,
     @InjectRepository(JournalLine)
     private readonly lineRepo: EntityRepository<JournalLine>,
-    private readonly account: AccountsService,
   ) {}
 
   async create(transaction: CreateTransactionDto): Promise<Transaction> {

@@ -54,29 +54,29 @@ export class AccountsService {
     return this.findAndComputeBalance({ fullName: name });
   }
 
-  async generateAccountTree(): Promise<Account[]> {
-    const accountMap = Object.create(null);
-    const list = await this.repo.find(
+  async generateAccountTree(types: TYPES[]): Promise<Account[]> {
+    const typesFilter = [];
+    types.forEach((type) => {
+      typesFilter.push({ fullName: { $like: `${type}%` } });
+    });
+    const accountList = await this.repo.find(
       {
-        $or: [
-          { fullName: { $like: `${TYPES.ASSETS}%` } },
-          { fullName: { $like: `${TYPES.EXPENSES}%` } },
-          { fullName: { $like: `${TYPES.INCOME}%` } },
-          { fullName: { $like: `${TYPES.LIABILITIES}%` } },
-        ],
+        $or: typesFilter,
       },
       ['lines', 'lines.transaction'], // populate collections
       { full_name: 'asc' }, // order by
     );
 
-    list.forEach((item) => {
+    const accountMap = Object.create(null);
+
+    accountList.forEach((item) => {
       item.computeBalance();
       accountMap[item.fullName] = item;
     });
 
     const accountTree = [];
 
-    list.forEach((item) => {
+    accountList.forEach((item) => {
       const namePath = item.fullName.split(':');
       namePath.pop();
       if (namePath.length) {
